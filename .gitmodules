@@ -1,0 +1,3 @@
+[submodule "uniswapV2DataPipeline/lib/forge-std"]
+	path = uniswapV2DataPipeline/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
