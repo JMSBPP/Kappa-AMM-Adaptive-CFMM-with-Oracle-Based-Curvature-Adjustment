@@ -1,3 +1,15 @@
 [submodule "uniswapV2DataPipeline/lib/forge-std"]
 	path = uniswapV2DataPipeline/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "uniswapV2DataPipeline/lib/reactive-smart-contract-demos"]
+	path = uniswapV2DataPipeline/lib/reactive-smart-contract-demos
+	url = https://github.com/Reactive-Network/reactive-smart-contract-demos
+[submodule "uniswapV2DataPipeline/lib/openzeppelin-contracts-upgradeable"]
+	path = uniswapV2DataPipeline/lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+[submodule "uniswapV2DataPipeline/lib/openzeppelin-foundry-upgrades"]
+	path = uniswapV2DataPipeline/lib/openzeppelin-foundry-upgrades
+	url = https://github.com/OpenZeppelin/openzeppelin-foundry-upgrades
+[submodule "uniswapV2DataPipeline/lib/openzeppelin-contracts"]
+	path = uniswapV2DataPipeline/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
