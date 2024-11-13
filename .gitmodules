@@ -13,3 +13,6 @@
 [submodule "uniswapV2DataPipeline/lib/openzeppelin-contracts"]
 	path = uniswapV2DataPipeline/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "uniswapV2DataPipeline/lib/uniswapv2-solc0.8"]
+	path = uniswapV2DataPipeline/lib/uniswapv2-solc0.8
+	url = https://github.com/WSbaikaishui/uniswapv2-solc0.8
