@@ -6,8 +6,6 @@ import "@Openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@UniswapV2/interfaces/IUniswapV2Factory.sol";
 
 contract UniswapV2FactoryHook is IReactive, AbstractReactive, Initializable {
-    bytes4 private constant GET_PAIRS_SIGNATURE =
-        bytes4(keccak256("allPairs(uint)"));
     address private constant SERVICE_ADDRESS =
         0x0000000000000000000000000000000000fffFfF;
     /**
@@ -52,14 +50,18 @@ contract UniswapV2FactoryHook is IReactive, AbstractReactive, Initializable {
      * @dev Returns all pairs created by the factory encoded as bytes
     
     */
+
     function getAllPairs() public returns (bytes memory data) {
         uint256 length = IUniswapV2Factory(UniswapFactoryAddress)
             .allPairsLength();
+        data = new bytes(length * 20);
+
         for (uint256 i = 0; i < length; i++) {
             address pair = IUniswapV2Factory(UniswapFactoryAddress).allPairs(i);
-            data = abi.encodePacked(data, pair);
+            assembly {
+                mstore(add(add(data, 0x20), mul(i, 20)), shl(96, pair))
+            }
         }
-
         emit InitBulk(true, data);
     }
 

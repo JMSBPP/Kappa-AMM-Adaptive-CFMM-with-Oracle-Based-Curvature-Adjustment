@@ -14,10 +14,8 @@ interface IUniswapV2PairProcesor {
 
     event StateVars(bytes dataVars);
 
-    function getPairData(
-        bytes memory data
-    ) external view returns (bytes memory);
+    function getPairData(bytes memory data) external;
     function getStateVars(
         address pair
-    ) external view returns (bytes memory dataVars);
+    ) external returns (bytes memory dataVars);
 }

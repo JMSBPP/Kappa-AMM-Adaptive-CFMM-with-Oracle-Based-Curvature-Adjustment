@@ -1,0 +1,49 @@
+No files changed, compilation skipped
+
+Ran 1 test for test/UniswapV2FactoryHook.t.sol:UniswapV2FactoryHookTest
+[PASS] testGetPair() (gas: 50781)
+Traces:
+  [50781] UniswapV2FactoryHookTest::testGetPair()
+    ├─ [4648] UniswapV2Factory::allPairs(0) [staticcall]
+    │   └─ ← [Return] UniswapV2Pair: [0x436052a18A0500a4E084cA325Cb105fe35604982]
+    ├─ [348] UniswapV2Factory::allPairsLength() [staticcall]
+    │   └─ ← [Return] 1
+    ├─ [34627] UniswapV2FactoryHook::getAllPairs()
+    │   ├─ [2348] UniswapV2Factory::allPairsLength() [staticcall]
+    │   │   └─ ← [Return] 1
+    │   ├─ [2648] UniswapV2Factory::allPairs(0) [staticcall]
+    │   │   └─ ← [Return] UniswapV2Pair: [0x436052a18A0500a4E084cA325Cb105fe35604982]
+    │   ├─ emit InitBulk(success: true, data: 0x436052a18a0500a4e084ca325cb105fe35604982)
+    │   └─ ← [Return] 0x436052a18a0500a4e084ca325cb105fe35604982
+    └─ ← [Stop] 
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 956.13µs (109.27µs CPU time)
+| lib/forge-std/src/mocks/MockERC20.sol:MockERC20 contract |                 |        |        |        |         |
+|----------------------------------------------------------|-----------------|--------|--------|--------|---------|
+| Deployment Cost                                          | Deployment Size |        |        |        |         |
+| 853721                                                   | 3739            |        |        |        |         |
+| Function Name                                            | min             | avg    | median | max    | # calls |
+| initialize                                               | 157520          | 157520 | 157520 | 157520 | 2       |
+
+
+| lib/uniswapv2-solc0.8/contracts/UniswapV2Factory.sol:UniswapV2Factory contract |                 |         |         |         |         |
+|--------------------------------------------------------------------------------|-----------------|---------|---------|---------|---------|
+| Deployment Cost                                                                | Deployment Size |         |         |         |         |
+| 2269247                                                                        | 10415           |         |         |         |         |
+| Function Name                                                                  | min             | avg     | median  | max     | # calls |
+| allPairs                                                                       | 2648            | 3648    | 3648    | 4648    | 2       |
+| allPairsLength                                                                 | 348             | 1348    | 1348    | 2348    | 2       |
+| createPair                                                                     | 1926186         | 1926186 | 1926186 | 1926186 | 1       |
+
+
+| src/UniswapV2FactoryHook.sol:UniswapV2FactoryHook contract |                 |       |        |       |         |
+|------------------------------------------------------------|-----------------|-------|--------|-------|---------|
+| Deployment Cost                                            | Deployment Size |       |        |       |         |
+| 537961                                                     | 2412            |       |        |       |         |
+| Function Name                                              | min             | avg   | median | max   | # calls |
+| getAllPairs                                                | 34627           | 34627 | 34627  | 34627 | 1       |
+
+
+
+
+Ran 1 test suite in 5.96ms (956.13µs CPU time): 1 tests passed, 0 failed, 0 skipped (1 total tests)
