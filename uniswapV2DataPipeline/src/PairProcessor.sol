@@ -6,6 +6,25 @@ import {IUniswapV2PairProcesor} from "./interfaces/IUniswapV2PairProcesor.sol";
 import "@ReactiveContracts/contracts/AbstractReactive.sol";
 import "@ReactiveContracts/contracts/IReactive.sol";
 
+// address public factory;
+// address public token0;
+// address public token1;
+
+// uint112 private reserve0;           // uses single storage slot, accessible via getReserves
+// uint112 private reserve1;           // uses single storage slot, accessible via getReserves
+// uint32  private blockTimestampLast; // uses single storage slot, accessible via getReserves
+
+// uint public price0CumulativeLast;
+// uint public price1CumulativeLast;
+// uint public kLast; // reserve0 * reserve1, as of immediately after the most recent liquidity event
+
+struct PairMetaData {
+    address pair;
+    address tokenIndexer;
+    address tokenPaired;
+    uint orderOfCreation;
+}
+
 contract PairProcessor is IUniswapV2PairProcesor, IReactive, AbstractReactive {
     /**
      * @dev Pair Processor responds to inital bulk upload of all pairs
@@ -17,6 +36,8 @@ contract PairProcessor is IUniswapV2PairProcesor, IReactive, AbstractReactive {
      *
      *
      */
+
+    //========REACTIVE NETWORK STATE VARIABLES===========
     address private constant SERVICE_ADDRESS =
         0x0000000000000000000000000000000000fffFfF;
     uint256 private constant INIT_BULK_TOPIC0 =
@@ -24,6 +45,9 @@ contract PairProcessor is IUniswapV2PairProcesor, IReactive, AbstractReactive {
 
     address private storageRouterAddress;
     uint64 private gasLimit;
+    //===============REACTIVE VM STATE VARIABLES=============
+    PairMetaData[] private PairsMetaData;
+    address[] private tokens;
 
     event StateVars(address indexed pair, bytes dataVars);
 
