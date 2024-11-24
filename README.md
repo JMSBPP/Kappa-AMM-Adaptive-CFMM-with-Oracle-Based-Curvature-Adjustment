@@ -1,8 +1,3 @@
-
-<script type="text/javascript" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
-
 # KAPPA: Adaptive AMM Curvature through Oracle-Driven Market Calibration
 <div style="text-align: center;">
   <img src="kappa logo.png" alt="Description" width="300"/>
@@ -50,7 +45,11 @@ This has some negative consequences, as it exploits the arbitrage problem and in
 ### Adaptive Trading Function
 
 To make the curvature a explicit, we procced with the paramterization:
-$$ F_{\kappa_F}(R_x,R_y) = (1-\kappa_F)(R_x+R_y)+\kappa_F(R_xR_y) $$
+
+$$
+F_{\kappa_F}(R_x,R_y) = (1-\kappa_F)(R_x+R_y)+\kappa_F(R_xR_y)
+
+$$
 
 
 where $\kappa_F \in [0,1]$
