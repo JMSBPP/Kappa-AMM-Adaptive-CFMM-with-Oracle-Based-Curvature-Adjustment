@@ -9,33 +9,142 @@ Kappa is a CFMM-type AMM based on CPMM pools (specifically Uniswap V2 and Sushis
 
 ## Problem
 
-CPMM were the first type of CFMM-based AMM implemented in DeFi. They implement a simplistic yet widely accepted trading function that assigns fixed weights to its reserves, making it a homogeneous function of degree one. This means that, by Euler’s theorem, it has constant scale returns.
+### Traditional Finance Market Making Rewiew
 
-The curvature of its underlying iso-liquidity curve (analogous to the indifference curve in utility theory) represents the level curve of the trading function at certain reserve levels and has some desired properties:
+In traditional market making liquidity providers revenue is the reward for the price discovery work they do, this is, they fix prices that aim to be equilibrium prices (price that reflects the fundamental value of the underlying asset traded in the market they provide liquidity), and all this process is ex-ante, the most common mechanism to fix prices is through LOB (limit order books) and the frequency they update prices depends on market conditions.
 
-1. It has an inverse relationship with market liquidity, which is a desirable property because it reduces slippage costs for traders and brings the CFMM exchange rate closer to the actual exchange rate in the external market, thereby reducing the arbitrage problem. This, in turn, lowers adverse selection costs for liquidity providers.[1].
+Since liquidity providers are facilitatiing liquidity to traders, the reward for this is to set a spread, meaning traders pay different prices depending on the operation they perform (buy or sell). Then the revenue of market makers is simply this spread. At a high level we can express this mathematically as:
 
-...
+$$
 
-[1]: [https://arxiv.org/pdf/2103.08842] Capponi, A., & Jia, R. (2021). The Adoption of Blockchain-Based Decentralized Exchanges.
+\Pi^{LP} = Y^{LP}(\mid P^{ASK/BID}-P\mid)- C^{LP}
 
-1. It is bounded below, which in turn bounds above the slippage cost that consumers (traders) incur while trading.[2].
+$$
+Where $\Pi^{LP}$ is the profit function $Y^{LP}$ is the revenue (which is the spread). This can be seen in the traditional firm theory perspective where the income per unit is the sale price times the quantity sold by setting the quantity sold as the amount the trader is demanding liquidity for and the sale price is the bid and ask price which is the sale price of liquidity.
 
+But, what about the costs they face:
+- What form does the cost take?
+- How is it originated?
+- What parameters define it endogoneusly?
 
-...
-
-[2]: [https://arxiv.org/pdf/2003.10001] Angeris, G., & Chitra, T. (2020, June). Improved Price Oracles: Constant Function Market Makers. Stanford University/Gauntlet Network.
-
-Even though it has some economically desirable properties, it is completely internally (endogenously) adjusted, which can lead to updated lags in response to the external market.
-
-This has some negative consequences, as it exploits the arbitrage problem and increases liquidity provider adverse selection costs, which demotivates them from providing liquidity and, in general, negatively affects the expected payoff of LPs.[1].[3].
-
-...
+All this questions can take different routes depending on the undeerlying market microstructure, but since our ultimate goal is to provide the foundations of the economic problems CFMM economic agents face, we will use as refernce the Gleston \& ... model, for quoting prices where liquidity providers are ex-ante price fixers, then.
 
 
-[3]: [https://anthonyleezhang.github.io/pdfs/lvr.pdf] Milionis, J., Moallemi, C. C., Roughgarden, T., & Zhang, A. L. (2024, May). Automated Market Making and Loss-Versus-Rebalancing. Columbia University & University of Chicago.
+- **What form does the cost take?**
+  
+  **R/**
+  
+   The cost they face is an adverse selection cost, this is. there exists a risk that the price they fix to be the equilibrium price is outdated due to a information shock that moved the equilibrium price to a given direction. 
+
+- **How is it originated?**
+
+   **R/** 
+   
+   Information shocks (innovation shocks in classic firm theory)  introduces a new economic agent that will enter the market to update the price prior to the liquidity provider by trading the underlying asset in the external market in whatever direction will put the liquidity provider market price back to equilibrium, but by doing so it has extracted value that would otherwise belong to the liquidity provider.
+
+- **What parameters define it endogoneusly?**
+
+   **R/** 
+
+   Naturally one can think that the greater the shock, the greater the value that an arbitrageur can extract from the liquidity provider. And this is actually correct, a good estimator of wild movementts in prices from a tationary point is volatility.
+   
+   Therefore at a high level we have the arbitrageur payoff function as:
+   $$
+
+   \Pi^{ARB} = Y^{ARB}(\sigma^2)- C^{ARB}(\mid P^{ASK/BID}-P\mid)
+
+   $$
+
+Therefore another work that has to be done by liqiuidity providers is ensure that their pricing system is resilient to volatility.
 
 
+One common hedge they have for this adverse selection cost is the establishment of trading fees. 
+
+This adds a constraint to the arbitrageur profit maximization problem as increases slippage costs and if the slippage costs are sufficiently high they wont trade as their prfit will be negative, as trading fees $\phi$ will increase their cost. Summarizing we have the three payoff function of all of our economic agents.
+$$
+
+\begin{cases}
+
+
+\Pi^{LP} = Y^{LP}(\mid P^{ASK/BID}-P\mid, \phi)- C^{LP}(\sigma^2)
+\\
+\Pi^{ARB} = Y^{ARB}(\sigma^2)- C^{ARB}(\mid P^{ASK/BID}-P\mid, \phi)\\
+\Pi^{TRADER} = Y^{TRADER}(U(X)) - C^{TRADER}(\mid P^{ASK/BID}-P\mid, \phi)\\
+\end{cases}
+$$
+
+**Summary**
+
+- Liquidty providers provide liquidty ex-ante are price makers and compete with arbitrageurs for rents
+  
+- Arbitrageurs are renters, which are market inefficiency as they extract value from the market
+
+- Traders maximize their utility
+- Traders and arbitrageurs are botgh in the demand side as they share the same cost function even though their goals are different
+
+### AMM As Economic Systems
+
+AMM's aim to provide a feasible way to implement a liquidity makret given the fact that blockchains introduce non-trivial network fees for all transactions.
+
+The design of CFMM has been the most succesful and widely accepted mechanism. CFMM's define a multifaceted trading function that defines the rules for supply and demand.
+
+From this fucntion bid and ask prices are defined. This is arguably the most destable feature as it inttroduces a whole new approach for marktet making, Under this approach, it follows.
+
+- Liquidity provider are price takers
+- The equilibrium price is completly left to be adjusted by the demand, this is liquidity providers do not perform the price discovery process, instead they ceed this to arbitrageours who now correct prices from internal non-informed traders shocks **back-running** and external price shocks **front-running**
+These powerful consequences entirely modify the payoff structure of the agents, We have:
+
+$$
+
+\begin{cases}
+
+
+\Pi^{LP} = Y^{LP}(\phi)- C^{LP}(\sigma^2, \mid P^{ASK/BID}-P\mid)
+\\
+\Pi^{ARB} = Y^{ARB}(\sigma^2, \mid P^{ASK/BID}-P\mid^{BACK \, RUNNING})- C^{ARB}(\mid P^{ASK/BID}-P\mid^{FRONT \, RUNNING}, \phi)\\
+\Pi^{TRADER} = Y^{TRADER}(U(X)) - C^{TRADER}(\mid P^{ASK/BID}-P\mid, \phi)\\
+\end{cases}
+$$
+
+
+A few thincs can be said about the above relations:
+
+
+- The arbitarge is now rewarded from slippage and is also part of their cost functions
+- Liquidty providera re only compensated with fees as they hold inventory risk, however they have ceeded price discovery to arbitrageurs and therefore slippage is no longer a reward for them but to arbitrageurs.
+- Compared to traditional market making **arbitrageurs** are no longer a makeket inefficeincy bu a vital part of the CFMM at leats at its current stage.
+
+**Questions arise:**
+
+
+- How to incentivize liquidity providers to take inventory risk?
+- What is the most optimla mechanisms for price discovery ?
+   - If arbitrageurs how incentivize them ?
+- How to attract trading volume ?
+
+<div style="text-align: center;">
+  <img src="image.png" alt="Description" width="300"/>
+</div>
+
+### Current Protocol Desings Issues
+
+CPMM were the first CFMM implemented by Uniswap, however its tradign function it's bid and ask prices are passively adjusted by liquidyt providers flow. the more liquidity they enter the lower the trading function curvature and thus the lower the slippage cost, and the less liquidity they leave the higher the trading function curvature and thus higher the slippage cost.
+
+In other words the protocol indirectly assumes that liquidity providers always optimize their inventories, which is no longer the case (technicall efficiency for liquidity providers).
+
+As we have implied here there is an inverse relation between the slippage cost nd the cruvature, the relation is
+
+$$
+
+\kappa_F = \frac{\partial C_{SLIPPAGE}}{\partial \Delta X}
+
+$$
+
+Where $\Delta X$ is the amount of the risky traded. This means that having control of the trading function curvature enables the power of price making, since an optimal trading function curvature would the optimal bid and ask prices.
+
+- How do we find this optimal trading function curvature? 
+- What exogeneties does this introduce ?
+- What is the optimla way to address them ?
 
 
 
@@ -52,113 +161,7 @@ $$F_{\kappa_F}(R_x,R_y) = (1-\kappa_F)(R_x+R_y)+\kappa_F(R_xR_y)$$
 where $\kappa_F \in [0,1]$
 
 
-### Econometric Tests
 
-
-One of the main results of the general equilibrium model for market making is that where transactional trading is incentivezed, this is,the preferences of this traders over the tokens on the pool is greater that the fees they pay. There exists an optimal curvature $\kappa_F^{*}$ that defines the social optimal trading function $F^*_{\kappa_F^*}$.
-
-They work went even further by staing the expected events that define this curvature level.
-
-Which is when the transactional trading volume poderado by the pool value is at its highest level.
-
-The work is to test this staments usign econometric tools to determine if this events can work as an oracle to manually adjust the curvature level to the already defined parametric trading function $F_{\kappa_F}$.
-
-To do this we prooced with the following:
-
-**Step 1 Test for $\text{Traders Preference Measure on}\  X \ \vee \ Y > \phi$**
-
-The equilibrium model states that traders are incentivized to trade when they expected payoff function is positive, and this is where the expected utility of trading is greater that they cost they face.
-
-In the DEX enviromment we identify costs as gast cost (transaction cost) and slippage cost (which is defined by the fees of the pool).
-
-This result can be summarized as 
-$$\text{Traders Preference Measure on} \  X \ \vee \ Y > \phi \implies \Delta X^{\text{COM}>0}$$
-
-where $\Delta X^{\text{COM}}$ is the amount of the risky asset traded.
-
-Therefore for a pool $i$ at time $t$, we aim to:
-
-**Step 1.1 Define a consistent, unbiased and efficient estimator of
-$\text{Traders Preference Measure on} \  X \ \vee \ Y$**
-
-**Step 1.2- Define a one partition $1$ dummy variable**
-
-$$\mathbb{1}^1_{it}=
-\begin{cases}
- 0 &  \text{Traders Preference Measure on} \  X \ \vee \ Y < \phi \\
- 1 & \text{Traders Preference Measure on} \  X \ \vee \ Y \geq \phi
-
-\end{cases}$$
-
-**Step 1.3 Define and test the model**
-
-$$\text{Transactional Trading Volume}_{it} = \beta_0+ \beta_1\cdot \mathbb{1}^1_{it} \\
-H_0: \beta_1,\beta_0 > 0\ \wedge \ \beta_1 > \beta_0$$
-
-<center>
-
-**If we are succesfull in our fisrt excercise we proceed to further segment our data.**
-
-</center>
-
-**Step 2 Test For Optimal Curvature**
-
-**Step 2.1 Further Data Segementation**
-
-We need to spot the time stamps $t$ on each of the $i-$th pools where 
-
-$$(\frac{\text{Transactional Trading Volume}}{V_\text{Z}^{\text{POOL}}})_{it}$$
-
-Where $V_\text{Z}^{\text{POOL}}$ is the value of the pool in a numeraire $Z$
-
-$$V_\text{Z}^{\text{POOL}} = P_{Z/X}R_X + P_{Z/Y}R_Y$$
-
-Where $P_{Z/X}, P_{Z/Y}$ are prices of the two assets $X,Y$ in the pool and $R_X,R_Y$ are the reserves levels of the pool.
-
-In order to capture more than one data point per pool we deifine a threshold.
-
-$$TH_{VOL} = \left\{\frac{\text{Transactional Trading Volume}}{V_\text{Z}^{\text{POOL}}} \mid \cdots \right\}$$
-
-Now we further segment our data as
-
-$$\mathbb{1}^{2}_{it} = \begin{cases}
-  0 & \frac{\text{Transactional Trading Volume}}{V_\text{Z}^{\text{POOL}}} \notin TH_{VOL} \\
-  1 & \frac{\text{Transactional Trading Volume}}{V_\text{Z}^{\text{POOL}}} \in TH_{VOL} 
-\end{cases}$$
-
-
-
-$$\Pi^{LP}_{it} = \beta_0 + \beta_1 \mathbb{1}^{1}_{it}+ \beta_2 \mathbb{1}^{2}_{it} + \beta_{12}\mathbb{1}^{12}_{it} \\
-
-H_0: \beta_{12} = 0$$
-
-If we are successful i.e ($\beta_{12}=0$), we have enough evidence to set bid an ask prices according to the curvature level given that
-
-$$\kappa_F = \frac{\partial P_{Y/X}^{BID/ASK}}{\partial \Delta X}$$
-
-To periodically adjust the trading function to the socailly optimal trading function in case the market itself fails to do so.
-
-But... We have the parametric trading function defined as
-
-$$F_{\kappa_F} = (1-\kappa_F)(R_X+R_Y) + \kappa_F(R_X\cdot R_Y)$$
-
-However the above test goal is to capture the conditions from where the trading function is  supposed to be at its social optimal level. (i.e where the curvature is optimal).
-
-The following questions are
-Given that in Uniswap V2 and Sushiswap the trading function is
-
-$$F(R_X,R_Y) = R_X\cdot R_Y$$
-
-**Questions**
-
-1. How do we obtain the curvature at any point in time given the state variables of the contracts?
-   - We know that
- -
-$$\kappa_F = \frac{\partial P_{Y/X}^{BID/ASK}}{\partial \Delta X}$$
-2. How do we obtain what the optimal curvature should be as a function of the state variables?
-3. Define a functional relationship between trading volume and curvature that allows us to asses a distance between the current curvature level and the optimal one
-$$\forall_t \, d(\kappa_F, \kappa_F^*)_t$$
-4. To save gas instead of sigle value $(\kappa_F)_t$ we define an interval from where the current curvature is defined as optimal $I^*(\kappa_F)$
 ## Method
 
 1. The user selects a pair of traded tokens already in a CPMM market.
@@ -169,47 +172,31 @@ $$\forall_t \, d(\kappa_F, \kappa_F^*)_t$$
 6. The oracle signals the pool when events occur.
 7. The pool automatically adjusts its curvature based on the oracle's input.
 
+## Derivation
 
-## To Do lists:
+We want to find a parametric expression for $\kappa_F$, nased on the result:
 
-0. Verificar hipotesis de articulo con datos
-   
-   
-   0.1 Disenar pipeline de datos
-   
-   
-   0.3 especificar modelo econometrico
-   
-   0.4 Conclusiones
+$$
 
-**POSIBLES RESULTADOS**
-- ACEPTA HIPOTESIS
-   - SE CONTINUA CON PROYECTO.
-- RECHAZO HIPOTESIS 
-  - SE RE-FORMULA PROYECTO
+\begin{aligned}
 
-1. Parametrizar curvatura de funcion de conservacion de CPMM implementable en Solidity
-2. Diseñar reactive system (servidores) en reactive contract para los siguientes consultas.[4]
+\kappa_F^* & = \kappa_F \equiv \max_{(\sum_{t=1}^T \Delta X_t, \sum_{t=1}^T \Delta Y_t)} \frac{(P_{Y/X})_T\cdot \sum_{t=1}^T \Delta X_t + \sum_{t=1}^T \Delta Y_t }{((P_{Y/X})_T\cdot R_X + R_Y)} \\
+
+s.t \\
+
+& \, \forall_t \Delta X_t \leq (R_X)_t \, \wedge \, \Delta Y_t \leq (R_Y)_t \\
+& \, \sum_{t=1}^T \Delta X_t \leq (R_X)_T \\
+& \, \sum_{t=1}^T \Delta Y_t \leq (R_Y)_T\\   
 
 
-...
+\end{aligned}
 
-[4]: [https://reactive.network/] Reactive Network. (2024, March 1). Reactive Smart Contracts: What They are and Why We Need Them.
+$$
 
+This is find where the trading volume is maximum at certain time.
 
-   2.1 Dados direccion de par de tokens extraer el mas liquido del contrato factory de Uniswap o Sushiswap
-   2.2 Aplicar regla de choque precio $<$ Prima de preferencia
-   2.3 Servidor que extrae volumen de comercio
-   2.4 Unificador de servidor de volumen de comercion con regla de choque precio $<$ Prima de preferencia
-3. Diseñar sistema AMM
-   3.1 clases (contratos)
-   3.2 Politicas
-   3.3 Eventos
-   3.4 Actores
-   3.5 Roles
-   3.6 Seguridad
-   3.7 Diagrama de funciones
-   3.8 Diagrama de clases (contratos del sistema)(interaccion de contratos)
-   3.9 Implementacion contrato
-4. Ciclo de desarrollo
+If we define the optimal curvature parametically as a function of the volume parameters.
 
+And given a parametric or numerical value for the curvature at that point in that time would give us an inefficiency estimator.
+
+$$\forall_t \, d(\kappa_F, \kappa_F^*)_t$$
