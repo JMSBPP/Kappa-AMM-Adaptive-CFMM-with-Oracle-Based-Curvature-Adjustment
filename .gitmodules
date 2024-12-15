@@ -16,3 +16,6 @@
 [submodule "contracts/lib/uniswapv2-solc0.8"]
 	path = contracts/lib/uniswapv2-solc0.8
 	url = https://github.com/WSbaikaishui/uniswapv2-solc0.8
+[submodule "contracts/lib/spot-price-aggregator"]
+	path = contracts/lib/spot-price-aggregator
+	url = https://github.com/1inch/spot-price-aggregator
