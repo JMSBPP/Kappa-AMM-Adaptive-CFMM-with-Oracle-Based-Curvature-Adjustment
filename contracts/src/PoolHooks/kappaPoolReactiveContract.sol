@@ -5,6 +5,10 @@ import {IReactive} from "@Reactive-Network-Contracts/IReactive.sol";
 import {AbstractReactive} from "@Reactive-Network-Contracts/AbstractReactive.sol";
 import {UniswapV2PoolMetadata} from "../utils/Metadata.sol";
 
+enum Initiated {
+    UNINITIATED,
+    INITIATED
+}
 abstract contract kappaPoolReactiveContract is
     UniswapV2PoolMetadata,
     IReactive,
@@ -12,7 +16,10 @@ abstract contract kappaPoolReactiveContract is
 {
     //STATE VARIABLES
     address public immutable pool;
+    address private externalMarketLogic;
     address public immutable deployer;
+
+    Initiated private initiated;
 
     //EVENTS
 
@@ -23,28 +30,76 @@ abstract contract kappaPoolReactiveContract is
     );
 
     event VM();
+    event CallbackSent();
+
+    //ERRORS
+
+    error NotDeployed();
 
     constructor(address _pool) UniswapV2PoolMetadata(_pool) {
         //Pool is not modifiable
+        require(initiated == Initiated.UNINITIATED, NotDeployed());
         pool = _pool;
         deployer = msg.sender;
-        getSubscriptions();
+        multiSubscribe();
+        initiated = Initiated.INITIATED;
     }
 
-    function multiSubscribe()
-        external
-        payable
-        // function subscribe(
-        //     uint256 chain_id,
-        //     address _contract,
-        //     uint256 topic_0,
-        //     uint256 topic_1,
-        //     uint256 topic_2,
-        //     uint256 topic_3
-        // ) external;
+    receive() external payable {}
 
-        //get the event metadata for all Uniswap Actions
+    /**
+     * @dev Subscribes to pool events
+     * @notice Needs to be heavlily optimized
+     */
+    function multiSubscribe() private {
+        getSubscriptions();
+        (bool subscription_MINT, ) = address(service).call(
+            subscriptions[subscriptionsKeys.MINT]
+        );
+        if (!subscription_MINT) {
+            vm = true;
+            emit VM();
+        } else {
+            emit Subscribed(address(service), pool, subscriptionsKeys.MINT);
+        }
+        (bool subscription_BURN, ) = address(service).call(
+            subscriptions[subscriptionsKeys.BURN]
+        );
+        if (!subscription_BURN) {
+            vm = true;
+            emit VM();
+        } else {
+            emit Subscribed(address(service), pool, subscriptionsKeys.BURN);
+        }
+        (bool subscription_SWAP, ) = address(service).call(
+            subscriptions[subscriptionsKeys.SWAP]
+        );
+        if (!subscription_SWAP) {
+            vm = true;
+            emit VM();
+        } else {
+            emit Subscribed(address(service), pool, subscriptionsKeys.SWAP);
+        }
+        (bool subscription_SYNC, ) = address(service).call(
+            subscriptions[subscriptionsKeys.SYNC]
+        );
 
-        receive
-    {}
+        if (!subscription_SYNC) {
+            vm = true;
+            emit VM();
+        } else {
+            emit Subscribed(address(service), pool, subscriptionsKeys.SYNC);
+        }
+    }
+    function react(
+        uint256 chain_id,
+        address _contract,
+        uint256 topic_0,
+        uint256 topic_1,
+        uint256 topic_2,
+        uint256 /* topic_3 */,
+        bytes calldata data,
+        uint256 /* block_number */,
+        uint256 /* op_code */
+    ) external vmOnly {}
 }
