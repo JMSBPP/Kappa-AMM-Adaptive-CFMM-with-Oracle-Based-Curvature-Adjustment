@@ -1,0 +1,153 @@
+<mxfile host="65bd71144e">
+    <diagram id="oTtM3KuxKOGGRTNgtILM" name="Page-1">
+        <mxGraphModel dx="1183" dy="2317" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="6" value="KappaOptimalPool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="990" y="-10" width="380" height="182" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="+ address: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6" vertex="1">
+                    <mxGeometry y="26" width="380" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="120" value="+ INITIALIZED: {TRUE, FALSE}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6" vertex="1">
+                    <mxGeometry y="48" width="380" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="6" vertex="1">
+                    <mxGeometry y="70" width="380" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="+ event: Deposited(optimalPoolAddress[ ], LPAddress, amount): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6" vertex="1">
+                    <mxGeometry y="78" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="+ event: Withdrawn(optimalPoolAddress[ ], LPAddress, amount): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6" vertex="1">
+                    <mxGeometry y="104" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="function:depositLiquidity(amount)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6" vertex="1">
+                    <mxGeometry y="130" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="function:withdrawLiquidity(percentage)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6" vertex="1">
+                    <mxGeometry y="156" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="Subscription&#10;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="1760" y="150" width="430" height="242" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="+ &lt;PK&gt; address: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="26" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="86" value="+ &lt;PK&gt; LPaddress: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="52" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="95" value="+ &lt;PK&gt; OptimalPoolAddress: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="78" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="10" vertex="1">
+                    <mxGeometry y="104" width="430" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" value="+ event: Subscribed(optimalPoolAddress[ ], LPAddress, amount, all): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="112" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="+ event: Unsubscribed(optimalPoolAddress[ ], LPAddress, amount, all): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="138" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="+ getSubscribedPools(LPAddress, withLiquidity bool): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="164" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="function:subscribe(UniswapPoolAddresses[], all bool, amount)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="190" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="function:unsubscribe(UniswapPoolAddresses[], all bool, amount)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="10" vertex="1">
+                    <mxGeometry y="216" width="430" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" value="*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="600.0010207950695" y="120.00321737297007" as="geometry">
+                        <mxPoint x="591" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="87" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="81" target="7" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1690" y="-10" as="targetPoint"/>
+                        <Array as="points"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="81" value="supplyProcessor" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="2330" y="-24" width="300" height="112" as="geometry"/>
+                </mxCell>
+                <mxCell id="82" value="+ &lt;FK&gt;: LPAddress" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="81" vertex="1">
+                    <mxGeometry y="26" width="300" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="83" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="81" vertex="1">
+                    <mxGeometry y="52" width="300" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="+ IndividualBalance(lpAddress): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="81" vertex="1">
+                    <mxGeometry y="60" width="300" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="+ Balance(): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="81" vertex="1">
+                    <mxGeometry y="86" width="300" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="" style="endArrow=none;dashed=1;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="10" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1610" y="220" as="sourcePoint"/>
+                        <mxPoint x="1970" y="30" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="110" value="" style="verticalAlign=bottom;html=1;ellipse;fillColor=strokeColor;fontFamily=Helvetica;fontSize=11;fontColor=default;" parent="1" vertex="1">
+                    <mxGeometry x="1158" y="203" width="4" height="4" as="geometry"/>
+                </mxCell>
+                <mxCell id="115" value="{disjoint}" style="ellipse;html=1;fillColor=strokeColor;labelPosition=center;align=center;fontFamily=Helvetica;fontSize=11;fontColor=default;verticalAlign=top;verticalLabelPosition=bottom;" parent="1" vertex="1">
+                    <mxGeometry x="1158" y="203" width="4" height="4" as="geometry"/>
+                </mxCell>
+                <mxCell id="116" value="" style="edgeStyle=elbowEdgeStyle;html=1;endSize=12;endArrow=block;endFill=0;elbow=horizontal;rounded=0;labelBackgroundColor=default;fontFamily=Helvetica;fontSize=11;fontColor=default;shape=connector;entryX=0.452;entryY=1.077;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="115" target="24" edge="1">
+                    <mxGeometry x="1" relative="1" as="geometry">
+                        <mxPoint x="1160" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="117" value="" style="edgeStyle=elbowEdgeStyle;html=1;elbow=vertical;verticalAlign=bottom;endArrow=none;rounded=0;labelBackgroundColor=default;fontFamily=Helvetica;fontSize=11;fontColor=default;startSize=14;shape=connector;" parent="1" source="115" edge="1">
+                    <mxGeometry x="1" relative="1" as="geometry">
+                        <mxPoint x="1380" y="250" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="1200" y="205"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="118" value="" style="edgeStyle=elbowEdgeStyle;html=1;elbow=vertical;verticalAlign=bottom;endArrow=none;rounded=0;labelBackgroundColor=default;fontFamily=Helvetica;fontSize=11;fontColor=default;startSize=14;shape=connector;" parent="1" source="115" edge="1">
+                    <mxGeometry x="1" relative="1" as="geometry">
+                        <mxPoint x="960" y="250" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="1120" y="205"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="121" value="InitializedKappaOptimalPool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="782" y="243" width="380" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="123" value="+ INITIALIZED: {TRUE}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="121" vertex="1">
+                    <mxGeometry y="26" width="380" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="124" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="121" vertex="1">
+                    <mxGeometry y="48" width="380" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="+ getPoolLiquidity(LPAddress, optimalPoolAddress): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="121" vertex="1">
+                    <mxGeometry y="56" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="+ getRevenue(LPAddress): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="121" vertex="1">
+                    <mxGeometry y="82" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="+ getAccruedPoolRevenue(LPAddress,optimalPoolAddress): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="121" vertex="1">
+                    <mxGeometry y="108" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="function:withdrawFeeRevenue(percentage)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="121" vertex="1">
+                    <mxGeometry y="134" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="129" value="NotInitializedKappaOptimalPool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="250" width="380" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="130" value="+ INITIALIZED: {FALSE}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="129" vertex="1">
+                    <mxGeometry y="26" width="380" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="131" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="129" vertex="1">
+                    <mxGeometry y="48" width="380" height="8" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
