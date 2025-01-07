@@ -1,0 +1,32 @@
+[
+    {
+        "Subject Domain": "Liquidity Management",
+        "Predicates": [
+            {
+                "Name": "Subscription",
+                "Type": "Entity-type name",
+                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address."
+            },
+            {
+                "Name": "Kappa Optimal Pool",
+                "Type": "Entity-type name",
+                "Description": "An optimal pool is a UniswapV2Pair with automatic and dynamic liquidity provision managed by the Kappa reactive control system protocol, determined by trading function curvature shocks triggered by trading volume signals."
+            },
+            {
+                "Name": "KappaOptimalPool.INITIALIZED",
+                "Type": "State Predicate Name",
+                "Description": "A KappaOptimalPool is initialized when it has at least one liquidity provider subscribed with non-zero inventories."
+            }
+        ]
+    },
+    {
+        "Subject Domain": "Equilibrium Management",
+        "Predicates": [
+            {
+                "Name": "",
+                "Type": "",
+                "Description": ""
+            }
+        ]
+    }
+]
