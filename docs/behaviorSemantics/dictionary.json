@@ -3,6 +3,11 @@
         "Subject Domain": "Liquidity Management",
         "Predicates": [
             {
+                "name": "Liquidity Provider",
+                "Type": "Entity-type name",
+                "Description": "A liquidity provider is an account uniquely identified by its address that subscribes to Kappa Optimal Pools."
+            },
+            {
                 "Name": "Subscription",
                 "Type": "Entity-type name",
                 "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address."
@@ -13,9 +18,29 @@
                 "Description": "An optimal pool is a UniswapV2Pair with automatic and dynamic liquidity provision managed by the Kappa reactive control system protocol, determined by trading function curvature shocks triggered by trading volume signals."
             },
             {
-                "Name": "KappaOptimalPool.INITIALIZED",
-                "Type": "State Predicate Name",
-                "Description": "A KappaOptimalPool is initialized when it has at least one liquidity provider subscribed with non-zero inventories."
+                "Name": "KappaOptimalPool.OPEN",
+                "Type": "State Predicate name",
+                "Description": "A KappaOptimalPool is open when it has at least one liquidity provider subscribed with non-zero inventories."
+            },
+            {
+                "Name": "KappaOptimalPool.SUBSCRIBED",
+                "Type": "State Predicate name",
+                "Description": "A KappaOptimalPool is subscribed if it has at least one liquidity provider subscribed with non-zero inventories."
+            },
+            {
+                "Name": "subscribed(KappaOptimalPool, LiquidityProvider)",
+                "Type": "Event name",
+                "Description": "An event triggered by a liquidity provider to subscribe to a specific pool. A subscribed event is uniquely identified by the occurrence date, the liquidity provider's address, and the optimal pool being subscribed to."
+            },
+            {
+                "Name": "deposited(optimalPoolAddress, liquidityProviderAddress, amount)",
+                "Type": "Event name",
+                "Description": "An event triggered by a liquidity provider to deposit funds to an optimal pool. A deposited event is uniquely identified by the occurrence date, the liquidity provider's address, and the optimal pool being subscribed to."
+            },
+            {
+                "Name": "withdrawn(optimalPoolAddress, liquidityProviderAddress, amount)",
+                "Type": "Event name",
+                "Description": "An event triggered by a liquidity provider to withdraw funds from an optimal pool. A withdrawn event is uniquely identified by the occurrence date, the liquidity provider's address, and the optimal pool being subscribed to."
             }
         ]
     },
@@ -23,9 +48,54 @@
         "Subject Domain": "Equilibrium Management",
         "Predicates": [
             {
-                "Name": "",
-                "Type": "",
-                "Description": ""
+                "Name": "Subscription",
+                "Type": "Entity-type name",
+                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address."
+            },
+            {
+                "Name": "Open KappaOptimalPool",
+                "Type": "Entity-type name",
+                "Description": "An Open KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.OPEN."
+            },
+            {
+                "Name": "Closed KappaOptimalPool",
+                "Type": "State Predicate name",
+                "Description": "A Closed KappaOptimalPool is a KappaOptimalPool whose state is not KappaOptimalPool.OPEN."
+            },
+            {
+                "Name": "Supply Processor",
+                "Type": "Entity-type name",
+                "Description": "A supply processor is a program that processes the inventories of subscribed liquidity providers deposited across open KappaOptimal pools."
+            },
+            {
+                "Name": "Shortaged KappaOptimalPool",
+                "Type": "Entity-type name",
+                "Description": "A Shortaged KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.SHORTAGED."
+            },
+            {
+                "Name": "Supply Surplus Kappa Optimal Pool",
+                "Type": "Entity-type name",
+                "Description": "A Supply Surplus KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.SUPPLY_SURPLUS"
+            },
+            {
+                "Name": "UniswapV2Market",
+                "Type": "Entity-type name",
+                "Description": "An UniswapV2Market is a UniswapV2Pair from which the protocol receives trading volume signals through the swap event."
+            },
+            {
+                "Name": "External Market",
+                "Type": "Entity-type name",
+                "Description": "An external market is a market that trades the same pairs as its corresponding UniswapV2Market. It is uniquely identified by the UniswapV2Pair address and its own address."
+            },
+            {
+                "Name": "Volume Router",
+                "Type": "Entity-type name",
+                "Description": "A volume router is a program that routes noise trading volume data received from the UniswapV2Pair and processed consider the external market data of that market"
+            },
+            {
+                "Name": "Noise Volume",
+                "Type": "Entity-type name",
+                "Description": "A Noise Volume is a program and data storage system that stores noise trading volume received from the Volume Router and triggers market adjustments to open KappaOptimalPools."
             }
         ]
     }
