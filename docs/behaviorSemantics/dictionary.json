@@ -59,8 +59,8 @@
             },
             {
                 "Name": "Closed KappaOptimalPool",
-                "Type": "State Predicate name",
-                "Description": "A Closed KappaOptimalPool is a KappaOptimalPool whose state is not KappaOptimalPool.OPEN."
+                "Type": "Entity-type name",
+                "Description": "A closed KappaOptimalPool is a KappaOptimalPool whose state is not KappaOptimalPool.OPEN. This entity can only be instantitiated by the close market function in the open kappa optimal pool."
             },
             {
                 "Name": "Supply Processor",
@@ -78,16 +78,6 @@
                 "Description": "A Supply Surplus KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.SUPPLY_SURPLUS"
             },
             {
-                "Name": "UniswapV2Market",
-                "Type": "Entity-type name",
-                "Description": "An UniswapV2Market is a UniswapV2Pair from which the protocol receives trading volume signals through the swap event."
-            },
-            {
-                "Name": "External Market",
-                "Type": "Entity-type name",
-                "Description": "An external market is a market that trades the same pairs as its corresponding UniswapV2Market. It is uniquely identified by the UniswapV2Pair address and its own address."
-            },
-            {
                 "Name": "Volume Router",
                 "Type": "Entity-type name",
                 "Description": "A volume router is a program that routes noise trading volume data received from the UniswapV2Pair and processed consider the external market data of that market"
@@ -96,6 +86,61 @@
                 "Name": "Noise Volume",
                 "Type": "Entity-type name",
                 "Description": "A Noise Volume is a program and data storage system that stores noise trading volume received from the Volume Router and triggers market adjustments to open KappaOptimalPools."
+            },
+            {
+                "Name": "AutoUnsubscribtionSignaling(closedKappaOptimalPool, Subscription)",
+                "Type": "Relationship name",
+                "Description": "An injective relationship is initiated by a closed kappa optimal pool that maps to its corresponding subscription. It signals the subscription entity to unsubscribe automatically from the pool."
+            },
+            {
+                "Name": "Instantiates(openKappaOptimalPool, closedKappaOptimalPool)",
+                "Type": "Relationship name",
+                "Description": "An injective relationship is initiated by an open kappa optimal pool and the closed market interface to initlialize it's corresponding closedKappaOptimalPool by changing it's state to KappaOptimalPool.CLOSED."
+            },
+            {
+                "Name": "routesMarketData(subscription, volumeRouter)",
+                "Type": "Relationship name",
+                "Description": "One subscription routes swap events data from the UniswapV2Market and external price and slippage costs from the corresponding external market to the volume router."
+            },
+            {
+                "Name": "routesVolumeData(volumeRouter, noiseVolume)",
+                "Type": "Relationship name",
+                "Description": "A volume router routes filtered noise trading volume data from the UniswapV2Market to the noise volume storage."
+            },
+            {
+                "Name": "TriggersMarketAdjustment(noiseVolume, openKappaOptimalPool)",
+                "Type": "Relationship name",
+                "Description": "One noise volume program triggers supply adjustment and/or market closure based upon detected curvature shifts to the corrresponfding open kappa optimal pool."
+            },
+            {
+                "Name": "OpenKappaOptimalPool.SHORTAGED",
+                "Type": "State Predicate name",
+                "Description": ""
+            },
+            {
+                "Name": "OpenKappaOptimalPool.SUPPLY_SURPLUS",
+                "Type": "State Predicate name",
+                "Description": ""
+            },
+            {
+                "Name": "ClosedKappaOptimalPool.INITIALIZED",
+                "Type": "State Predicate name",
+                "Description": ""
+            },
+            {
+                "Name": "OpenKappaOptimalPool.SHORTAGED",
+                "Type": "State Predicate name",
+                "Description": ""
+            },
+            {
+                "Name": "OpenKappaOptimalPool.curvature",
+                "Type": "Attribute name",
+                "Description": ""
+            },
+            {
+                "Name": "Subscription.registry",
+                "Type": "Attribute name",
+                "Description": ""
             }
         ]
     }
