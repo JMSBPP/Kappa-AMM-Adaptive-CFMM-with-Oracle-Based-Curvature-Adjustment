@@ -1,0 +1,247 @@
+[
+    {
+        "Subject Domain": "Liquidity Management",
+        "Predicates": [
+            {
+                "name": "Liquidity Provider",
+                "Type": "Entity-type name",
+                "Description": "A liquidity provider is an account uniquely identified by its address that subscribes to Kappa Optimal Pools."
+            },
+            {
+                "Name": "Subscription",
+                "Type": "Entity-type name",
+                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address."
+            },
+            {
+                "Name": "Kappa Optimal Pool",
+                "Type": "Entity-type name",
+                "Description": "An optimal pool is a UniswapV2Pair with automatic and dynamic liquidity provision managed by the Kappa reactive control system protocol, determined by trading function curvature shocks triggered by trading volume signals."
+            },
+            {
+                "Name": "KappaOptimalPool.OPEN",
+                "Type": "State Predicate name",
+                "Description": "A KappaOptimalPool is open when it has at least one liquidity provider subscribed with non-zero inventories."
+            },
+            {
+                "Name": "KappaOptimalPool.SUBSCRIBED",
+                "Type": "State Predicate name",
+                "Description": "A KappaOptimalPool is subscribed if it has at least one liquidity provider subscribed with non-zero inventories."
+            },
+            {
+                "Name": "subscribed(KappaOptimalPool, LiquidityProvider)",
+                "Type": "Event name",
+                "Description": "An event triggered by a liquidity provider to subscribe to a specific pool. A subscribed event is uniquely identified by the occurrence date, the liquidity provider's address, and the optimal pool being subscribed to."
+            },
+            {
+                "Name": "unsubscribed(optimalPoolAddress, liquidityProviderAddress, amount0, amount1, ISAUTO=FALSE)",
+                "Type": "Event name",
+                "Description": "An event is triggered by a liquidity provider to unsubscribe from a specific pool. An unsubscribed event is uniquely identified by the occurrence date, the liquidity provider's address, and the optimal pool being unsubscribed from, along with the amounts to be transferred back to the liquidity provider. ISAUTO=FALSE characterizes the fact that the unsubscription was triggered by the liquidity provider's decision and not by system adaptive processes."
+            },
+            {
+                "Name": "deposited(optimalPoolAddress,uniswapV2MarketAddress, liquidityProviderAddress, amount, SUBSCRIBED)",
+                "Type": "Event name",
+                "Description": "An event is triggered by a liquidity provider to deposit funds into an optimal pool. A deposited event is uniquely identified by the occurrence date, the liquidity provider's address, and the optimal pool being subscribed to. It also tracks mint events from unsubscribed liquidity providers who provide liquidity in the corresponding UniswapV2Market, identified by SUBSCRIBED=FALSE"
+            },
+            {
+                "Name": "withdrawn(optimalPoolAddress, uniswapV2MarketAddress,liquidityProviderAddress, amount, SUBSCRIBED)",
+                "Type": "Event name",
+                "Description": "An event triggered by a liquidity provider to withdraw funds from an optimal pool. A withdrawn event is uniquely identified by the occurrence date, the liquidity provider's address, and the optimal pool being subscribed to.It also tracks burn events from unsubscribed liquidity providers who provide liquidity in the corresponding UniswapV2Market, identified by SUBSCRIBED=FALSE"
+            }
+        ]
+    },
+    {
+        "Subject Domain": "Equilibrium Management",
+        "Predicates": [
+            {
+                "Name": "Subscription",
+                "Type": "Entity-type name",
+                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address."
+            },
+            {
+                "Name": "Open KappaOptimalPool",
+                "Type": "Entity-type name",
+                "Description": "An Open KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.OPEN."
+            },
+            {
+                "Name": "Closed KappaOptimalPool",
+                "Type": "Entity-type name",
+                "Description": "A closed KappaOptimalPool is a KappaOptimalPool whose state is not KappaOptimalPool.OPEN. This entity can only be instantitiated by the close market function in the open kappa optimal pool."
+            },
+            {
+                "Name": "Supply Processor",
+                "Type": "Entity-type name",
+                "Description": "A supply processor is a program that processes the inventories of subscribed liquidity providers deposited across open KappaOptimal pools."
+            },
+            {
+                "Name": "Shortaged KappaOptimalPool",
+                "Type": "Entity-type name",
+                "Description": "A Shortaged KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.SHORTAGED."
+            },
+            {
+                "Name": "Supply Surplus Kappa Optimal Pool",
+                "Type": "Entity-type name",
+                "Description": "A Supply Surplus KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.SUPPLY_SURPLUS"
+            },
+            {
+                "Name": "Volume Router",
+                "Type": "Entity-type name",
+                "Description": "A volume router is a program that routes noise trading volume data received from the UniswapV2Pair and processed consider the external market data of that market"
+            },
+            {
+                "Name": "Noise Volume",
+                "Type": "Entity-type name",
+                "Description": "A Noise Volume is a program and data storage system that stores noise trading volume received from the Volume Router and triggers market adjustments to open KappaOptimalPools."
+            },
+            {
+                "Name": "AutoUnsubscribtionSignaling(closedKappaOptimalPool, Subscription)",
+                "Type": "Relationship name",
+                "Description": "An injective relationship is initiated by a closed kappa optimal pool that maps to its corresponding subscription. It signals the subscription entity to unsubscribe automatically from the pool."
+            },
+            {
+                "Name": "Instantiates(openKappaOptimalPool, closedKappaOptimalPool)",
+                "Type": "Relationship name",
+                "Description": "An injective relationship is initiated by an open kappa optimal pool and the closed market interface to initlialize it's corresponding closedKappaOptimalPool by changing it's state to KappaOptimalPool.CLOSED."
+            },
+            {
+                "Name": "routesMarketData(subscription, volumeRouter)",
+                "Type": "Relationship name",
+                "Description": "One subscription routes swap events data from the UniswapV2Market and external price and slippage costs from the corresponding external market to the volume router."
+            },
+            {
+                "Name": "routesVolumeData(volumeRouter, noiseVolume)",
+                "Type": "Relationship name",
+                "Description": "A volume router routes filtered noise trading volume data from the UniswapV2Market to the noise volume storage."
+            },
+            {
+                "Name": "TriggersMarketAdjustment(noiseVolume, openKappaOptimalPool)",
+                "Type": "Relationship name",
+                "Description": "One noise volume program triggers supply adjustment and/or market closure based upon detected curvature shifts to the corrresponfding open kappa optimal pool."
+            },
+            {
+                "Name": "OpenKappaOptimalPool.SHORTAGED",
+                "Type": "State Predicate name",
+                "Description": "An OpenKappaOptimalPool is in the state OpenKappaOptimalPool.SHORTAGED, where the initial liquidity deposited was not enough to offset the shortage in the pool."
+            },
+            {
+                "Name": "OpenKappaOptimalPool.SUPPLY_SURPLUS",
+                "Type": "State Predicate name",
+                "Description": "An OpenKappaOptimalPool is in the state OpenKappaOptimalPool.SUPPLY_SURPLUS, where the initial auto-liquidityWithdrawal was not enough to offset the surplus in the pool."
+            },
+            {
+                "Name": "OpenKappaOptimalPool.EQUILIBRIUM",
+                "Type": "State Predicate name",
+                "Description": "An OpenKappaOptimalPool is in a state of equilibrium after the occurrence of a missing amounts event of 0 or a zero excess liquidity event occurrence."
+            },
+            {
+                "Name": "amountsMissing(shortgaged, amount0, amount1, timeStamp)",
+                "Type": "Event Name",
+                "Description": "The amounts (amount0, amount1) missing to reach equilibrium in the shortaged pool at the timestamp."
+            },
+            {
+                "Name": "excessLiquidity(supplySurplus, amount0, amount1, timeStamp)",
+                "Type": "Event Name",
+                "Description": "The amounts (amount0, amount1) that are left over to reach equilibrium in the supply surplus pool at the timestamp."
+            },
+            {
+                "Name": "ClosedKappaOptimalPool.INITIALIZED",
+                "Type": "State Predicate name",
+                "Description": "A closed Kappa optimal pool is in the state ClosedKappaOptimalPool.INITIALIZED after the occurrence of the initialized event."
+            },
+            {
+                "Name": "OpenKappaOptimalPool.curvature",
+                "Type": "Attribute name",
+                "Description": "The curvature of the open Kappa optimal pool is the state value of the underlying trading function derived from the liquidity inventories and the noise volume protocol estimator."
+            },
+            {
+                "Name": "Subscription.registry",
+                "Type": "Attribute name",
+                "Description": "The subscription registry is the immutable mapping that maps the KappaOptimalPool address to the associated UniswapV2PairAddress and maps the UniswapV2PairAddress to the associated externalMarketAddress."
+            },
+            {
+                "Name": "liquidityDeposited(shortgaged, supplyProcessor, amountIn0, amountIn1)",
+                "Type": "Event name",
+                "Description": "The amounts (amountIn0, amountIn1) are deposited into the OpenKappaOptimal by the supply processor."
+            },
+            {
+                "Name": "liquidityWithdrawn(supplySurplus, supplyProcessor, amountOut0,amountOut1)",
+                "Type": "Event name",
+                "Description": "The amounts (amountOut0, amountOut1) are withdrawn from the supply surplus pool when requested by the OpenKappaOptimal."
+            },
+            {
+                "Name": "requestRebalancingAmounts(openKappaOptimalPool, supplyProcessor, amount0, amount1)",
+                "Type": "Event name",
+                "Description": "The amounts (amount0, amount1) are requested to be deposited by the supply processor in the OpenKappaOptimalPool, and a message is sent by the OpenKappaOptimalPool to the supply processor."
+            },
+            {
+                "Name": "closeMarket(openKappaOptimalPool, closedKappaOptimalPool, closeTime)",
+                "Type": "Event name",
+                "Description": "A closedKappaOptimalPool is created by its corresponding openKappaOptimalPool"
+            },
+            {
+                "Name": "TransferOutstandingInventories(closedKappaOptimalPool, lpTokenShare, liquidityProviderAddress,amount0,amount1,closeTime, remainingLpsToReimburse)",
+                "Type": "Event name",
+                "Description": "LP token share equivalents in amount0 and amount1 are deposited to the liquidity provider's account address in response to the initialization of the corresponding closed market. It also includes a count of the liquidity providers still to be reimbursed"
+            },
+            {
+                "Name": "requestUnsubscribe(closedKappaOptimalPool, liquidityProviderAddress, subscriptionAddress, remainingLpsToUnsubscribe)",
+                "Type": "Event name",
+                "Description": "Closed_Kappa_Optimal_Pool requests the liquidityProviderAddress corresponding subscription to auto-unsubscribe from the corresponding OpenKappaOptimalPool in response to TransferOutstandingInventories.It also includes a count of the liquidity providers still to be unsubscribed"
+            },
+            {
+                "Name": "Initialized(closeTime, openKappaOptimalPool)",
+                "Type": "Event name",
+                "Description": "The closed market is initialized right after the close time in response to its creation by the OpenKappaOptimalPool, identified by the occurrence of the closeMarket at closeTime."
+            },
+            {
+                "Name": "Terminated(closedKappaOptimalPool, remainingLpsToUnsubscribe==0, remainingLpsToReimburse==0)",
+                "Type": "Event Name",
+                "Description": "The closed market is terminated when both remainingLpsToUnsubscribe and remainingLpsToReimburse are 0, triggering the self-destruction of the closed market."
+            },
+            {
+                "Name": "unsubscribed(kappaPoolAddress, liquidityProviderAddress, amount0, amount1, ISAUTO=TRUE)",
+                "Type": "Event name",
+                "Description": "A liquidity provider unsubscribed from the KappaPool address, requesting the amounts (amount0, amount1) to be returned to their liquidity provider's account address. ISAUTO=TRUE characterizes the fact that the unsubscription was triggered by the system's adaptive processes when a market is closed."
+            },
+            {
+                "Name": "internalMarketSwap(subscriptionAddress,UniswapV2Pooladdress,amount0In, amount1In, amount0Out, amount1Out, swapTime)",
+                "Type": "Event name",
+                "Description": "A swap event in the UniswapV2Market is listened to by its corresponding OpenKappaOptimalPool subscription address."
+            },
+            {
+                "Name": "externalMarketData(subscriptionAddress, offChainOracleAddress, swapTime, price, slippageCost)",
+                "Type": "Event name",
+                "Description": "The price and slippage cost of a swap at the swap time of the subscription pool's underlying market are received from the ExternalMarket oracle."
+            },
+            {
+                "Name": "OptimalAllocationSent(supplyProcessor, openKappaOptimalPool, amount0, amount1)",
+                "Type": "Event name",
+                "Description": "The amounts (amount0, amount1) are sent from the supply processor to the OpenKappaOptimalPool, previously optimally calculated from the existing inventories on the supply processor, in response to the request sent by the OpenKappaOptimalPool."
+            },
+            {
+                "Name": "swapReceived(subscription.UniswapMarketAddress,subscription.externalMarketAddress,amount0In,amount1In,amount0Out,amount1Out,externalPrice, externalSlippageCostswapTime)",
+                "Type": "Event name",
+                "Description": "Swap data is received by the volume router along with its corresponding external data."
+            },
+            {
+                "Name": "noiseVolumeTrade(volumeRouter,subscription.UniswapMarketAddress,amount0, amount1,swapTime,swapRelevantData, timeStamp)",
+                "Type": "Event name",
+                "Description": "A swap that took place at UniswapV2Market at swapTime, with quantities amount0 and amount1, along with swap-relevant data, is declared to be a noise volume trade by the volume router's noise volume labeling process."
+            },
+            {
+                "Name": "volumeRegimeChange(noiseVolume,subscription.openKappaOptimalPoolAddress newMaxVolume, previousMaxVolume, timeStamp, volumeRegimeChangeRelevantData)",
+                "Type": "Event name",
+                "Description": "A newMaxVolume value in subscription.openKappaOptimalPoolAddress at timeStamp is determined by the noiseVolume that differs from the previousMaxVolume and has volumeRegimeChangeRelevantData."
+            },
+            {
+                "Name": "curvatureShift(noiseVolume,subscription.openKappaOptimalPoolAddress,deltaCurvature, timeStamp, curvatureShiftRelevantData)",
+                "Type": "Event name",
+                "Description": "A newCurvature value in subscription.openKappaOptimalPoolAddress at timeStamp is determined by the noiseVolume that differs from the previousCurvature and has curvatureShiftRelevantData. This is the response to the volume regime change and the new maxVolume."
+            },
+            {
+                "Name": "requestMarketClosure(noiseVolume,subscription.openKappaOptimalPoolAddress, deltaCurvatureBound, timeStamp, requestMarketClosureRelevantData)",
+                "Type": "Event name",
+                "Description": "The noiseVolume requests market closure in subscription.openKappaOptimalPoolAddress at timeStamp. This is the response to the curvature shift, deltaCurvature, coinciding with the deltaCurvatureBound"
+            }
+        ]
+    }
+]

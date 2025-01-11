@@ -1,0 +1,11 @@
+{
+    "Title": "Mission Statement",
+    "Purpose": "Enhance the capital efficiency of Uniswap V2 passive liquidity providers relative to risk inventory minimization and liquidity volume fulfillment.",
+    "Responsabilities": [
+        "Manage liquidity providers Uniswap V2 pool's subscriptions",
+        "Actively reacts to each liquidity provider action ",
+        "Passively listens to swap actions and processes them for liquidity demand estimation and signals",
+        "Pro-actively adjust liquidity provider's inventories among markets based on demand estimation signals."
+    ],
+    "Discussion": "Kappa responds to the state of the Uniswap V2 pool to ensure that passive liquidity providers supply an optimal quantity of liquidity based on current market conditions. Thus, the Kappa optimal pool system can be considered a dynamic optimizer for liquidity providers and a market-making tool for the Uniswap V2 protocol."
+}
