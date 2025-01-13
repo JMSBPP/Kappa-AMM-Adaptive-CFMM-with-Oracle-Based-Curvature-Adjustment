@@ -3,14 +3,71 @@
         "Subject Domain": "Liquidity Management",
         "Predicates": [
             {
-                "name": "Liquidity Provider",
+                "Name": "Position",
                 "Type": "Entity-type name",
-                "Description": "A liquidity provider is an account uniquely identified by its address that subscribes to Kappa Optimal Pools."
+                "Description": "A position is a liquidity provider portfolio interaction that allows him/her to obtain revenue metrics and withdraw accrued revenue fees. It only exists when a liquidity provider subscribes to a Uniswap market and the corresponding kappa optimal pool is open",
+                "Services": [
+                    {
+                        "Name": "withdrawFeeRevenue(optimalPoolAddress, liquidityProviderAddress, percentage)",
+                        "Triggering Events": [
+                            "The liquidity provider requests to get a portion of its pool share"
+                        ],
+                        "Delivered Services": [
+                            "Accrued fees are calculated and sent to the liquidity provider's specified address."
+                        ],
+                        "Assumptions": [
+                            "percentage is postive and less than 1",
+                            "liquidity provider has deposited funds in the protocol"
+                        ]
+                    }
+                ]
             },
             {
                 "Name": "Subscription",
                 "Type": "Entity-type name",
-                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address."
+                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address.",
+                "Services": [
+                    {
+                        "Name": "subscribe(uniswapV2PairAddress, liquidityProviderAddress, amount)",
+                        "Triggering Events": [
+                            "The liquidity provider requests to subscribe to the UniswapV2PairAddress, depositing an amount to be managed by the protocol."
+                        ],
+                        "Delivered Services": [
+                            "liquidity provider is subscribed to the pool",
+                            "amount deposited is sent to the supplyProcessor"
+                        ],
+                        "Assumptions": [
+                            "amounts deposited are non negative"
+                        ]
+                    },
+                    {
+                        "Name": "depositLiquidity(subscriptionAddress, liquidityProviderAddress, amount)",
+                        "Triggering Events": [
+                            "A subscribed liquidity provider requests to deposit funds into the pool"
+                        ],
+                        "Delivered Services": [
+                            "funds are sent to supplyProcessor"
+                        ],
+                        "Assumptions": [
+                            "amounts deposited are non-negative",
+                            "liquidity provider is subscribed to at least one pool"
+                        ]
+                    },
+                    {
+                        "Name": "withdrawLiquidity(subscriptionAddress, liquidityProviderAddress, amount)",
+                        "Triggering Events": [
+                            "A subscribed liquidity provider requests to withdraw funds into the pool"
+                        ],
+                        "Delivered Services": [
+                            "funds are sent to liquidity provider"
+                        ],
+                        "Assumptions": [
+                            "amounts to be withdrawn are non-negative",
+                            "liquidity provider is subscribed to at least one pool",
+                            "The converted to numeraire amounts are not greater than the liquidity provider's balance plus accrued fee revenue."
+                        ]
+                    }
+                ]
             },
             {
                 "Name": "Kappa Optimal Pool",
@@ -55,27 +112,136 @@
             {
                 "Name": "Subscription",
                 "Type": "Entity-type name",
-                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address."
+                "Description": "A subscription is a contract between a liquidity provider and the Kappa protocol, in which the liquidity provider provides liquidity to the protocol, and the protocol, in turn, consents to manage the liquidity provider's inventories. Additionally, the Kappa protocol enables subscription management for liquidity providers. A subscription is instantiated by a UniswapV2Pair address and a liquidity provider address.",
+                "Services": [
+                    {
+                        "Name": "autoUnsubscribe(subscriptionAddress, liquidityProviderAddress, amount)",
+                        "Triggering Events": [
+                            "requestUnsubscribe event was triggered by a closedKappaOptimalPool"
+                        ],
+                        "Delivered Services": [
+                            "liquidity provider is unsubscribed from the pool",
+                            "liquidity provider total balance is calculated and sent to supplyProcessor"
+                        ],
+                        "Assumptions": [
+                            "liquidity provider is subscribed to the underlying UniswapV2Pair"
+                        ]
+                    }
+                ]
             },
             {
                 "Name": "Open KappaOptimalPool",
                 "Type": "Entity-type name",
-                "Description": "An Open KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.OPEN."
+                "Description": "An Open KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.OPEN.",
+                "Services": [
+                    {
+                        "Name": "categorize(prevCategorizeTimeStamp, timeStamp)",
+                        "Triggering Events": [
+                            "either amountsMissing(), excessLiquidity() event was triggered by a market adjustment with a ",
+                            "OR",
+                            "A LiquidityDeposited() event was triggered by a market adjustment"
+                        ],
+                        "Delivered Services": [
+                            "At timestamp, the open KappaOptimalPool sets it's state as supply surplus, shortgaged, or equilibrium."
+                        ],
+                        "Assumptions": [
+                            "timeStamp > prevTimeStamp"
+                        ]
+                    },
+                    {
+                        "Name": "autoWithdrawLiquidity(amount0, amount1, prevRebalancedTime,timeStamp)",
+                        "Triggering Events": [
+                            "A curvatureShift() event was triggered by NoiseVolume, and it reported withdrawal re-balancing"
+                        ],
+                        "Delivered Services": [
+                            "amounts that do not exceed liquidity inventoirs balances at timeStamp are sent to supplyProcessor",
+                            "If the difference between the curvature shift ask and the pool balance is positive, it triggers the amountsMissing(difference) event."
+                        ],
+                        "Assumptions": [
+                            "timeStamp > prevRebalancedTime",
+                            "amount0, amount1 > 0"
+                        ]
+                    },
+                    {
+                        "Name": "closeMarket(timeStamp)",
+                        "Triggering Events": [
+                            "A curvatureShift() event triggered by NoiseVolume matches the market closureBound.",
+                            "the pool has reached zero subscribers at timeStamp"
+                        ],
+                        "Delivered Services": [
+                            "A closeKappaOptimalPool contract is created using CREATE2.",
+                            "A closeMarket(timeStamp) event is triggered"
+                        ],
+                        "Assumptions": []
+                    },
+                    {
+                        "Name": "getRebalancingAmounts(amount0, amount1,timeStamp)",
+                        "Triggering Events": [
+                            "A curvatureShift() event was triggered by NoiseVolume, and it reported a deposit re-balancing of (amount0, amount1)."
+                        ],
+                        "Delivered Services": [
+                            "amount0 and amount1 are calculated and trigger the requestRebalancingAmounts(amount0, amount1, timeStamp) event."
+                        ],
+                        "Assumptions": [
+                            "amount0, amount1 > 0"
+                        ]
+                    }
+                ]
             },
             {
                 "Name": "Closed KappaOptimalPool",
                 "Type": "Entity-type name",
-                "Description": "A closed KappaOptimalPool is a KappaOptimalPool whose state is not KappaOptimalPool.OPEN. This entity can only be instantitiated by the close market function in the open kappa optimal pool."
+                "Description": "A closed KappaOptimalPool is a KappaOptimalPool whose state is not KappaOptimalPool.OPEN. This entity can only be instantiated by the close market function in the open kappa optimal pool.",
+                "Services": [
+                    {
+                        "Name": "transferOutstandingInventories(timeStamp)",
+                        "Triggering Events": [
+                            "An initialized(prevTime) event was triggered by the creation of the closed Optimal Pool."
+                        ],
+                        "Delivered Services": [
+                            "It triggers the requestUnsubscribe(poolAddress, liquidityProviderAddress, totalBalance) event for all liquidity providers subscribed to the closedKappa."
+                        ],
+                        "Assumptions": [
+                            "prevTime < timeStamp"
+                        ]
+                    },
+                    {
+                        "Name": "terminate(timeStamp)",
+                        "Triggering Events": [
+                            "requestUnsubscribe() event has been successfully triggered for all liquiduidity providers"
+                        ],
+                        "Delivered Services": [
+                            "triggers the terminated(timeStamp) event",
+                            "the contract is self-destructed"
+                        ]
+                    }
+                ]
             },
             {
                 "Name": "Supply Processor",
                 "Type": "Entity-type name",
-                "Description": "A supply processor is a program that processes the inventories of subscribed liquidity providers deposited across open KappaOptimal pools."
+                "Description": "A supply processor is a program that processes the inventories of subscribed liquidity providers deposited across open KappaOptimal pools.",
+                "Services": [
+                    {
+                        "Name": "depositOptimalAllocation(timeStamp, amount0*, amount1*, poolAddress)",
+                        "Triggering Events": [
+                            "A requestRebalancingAmounts(poolAddress,amount0, amount1, timeStamp) event was triggered by the openKappaOptimalPool."
+                        ],
+                        "Delivered Services": [
+                            "It calculates the amounts (amount0*, amount1*) that are to be sent to the kappaOptimalPool for deposit and triggers the LiquidityDeposited(amount0*, amount1*, timeStamp, amount0*-amount0, amount1*-amount1) event."
+                        ],
+                        "Assumptions": [
+                            "amount0*, amount1* > 0",
+                            "amount0*<= amount0",
+                            "amount1* <= amount1"
+                        ]
+                    }
+                ]
             },
             {
                 "Name": "Shortaged KappaOptimalPool",
                 "Type": "Entity-type name",
-                "Description": "A Shortaged KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.SHORTAGED."
+                "Description": "A Shortaged KappaOptimalPool is a KappaOptimalPool whose state is set to KappaOptimalPool.SHORTAGED.",
             },
             {
                 "Name": "Supply Surplus Kappa Optimal Pool",
@@ -85,12 +251,72 @@
             {
                 "Name": "Volume Router",
                 "Type": "Entity-type name",
-                "Description": "A volume router is a program that routes noise trading volume data received from the UniswapV2Pair and processed consider the external market data of that market"
+                "Description": "A volume router is a program that routes noise trading volume data received from the UniswapV2Pair and processed consider the external market data of that market",
+                "Services": [
+                    {
+                        "Name": "backTradeIndicator(amount0, timeStamp, amount0*, prevTimeStamp)",
+                        "Triggering Events": [
+                            "A swapReceived(amount0, amount1, timeStamp) is heard by the volumeRouter"
+                        ],
+                        "Delivered Services": [
+                            "It labels the trade as a back-run arbitrage trade if amount0 > 0.75 * amount0*, where amount0* is the immediate prior trade in the reverse direction."
+                        ],
+                        "Assumptions": [
+                            "timeStamp -prevTimeStamp---> 0",
+                            "sign(amount0)=-sign(amount0*)"
+                        ]
+                    },
+                    {
+                        "Name": "innovationsIndicator(amount0, timeStamp)",
+                        "Triggering Events": [
+                            "A swapReceived(amount0, amount1, timeStamp) is heard by the volumeRouter"
+                        ],
+                        "Delivered Services": [
+                            "The externalPrice at timeStamp is obtained from the external market oracle.",
+                            "the internal price is obtained from the UniswapV2Pair contract.",
+                            "It labels the trade as front-run arbitrage if the slippage cost with respect to the external market price is greater than the fee."
+                        ],
+                        "Assumptions": []
+                    },
+                    {
+                        "Name": "sendNoiseVolumeTrade(amount0, timeStamp)",
+                        "Triggering Events": [
+                            "The trade (amount0, timeStamp) is not labeled as back-run or front-run."
+                        ],
+                        "Delivered Services": [
+                            "It triggers the noiseVolumeTrade(amount0, timeStamp) event."
+                        ],
+                        "Assumptions": []
+                    }
+                ]
             },
             {
                 "Name": "Noise Volume",
                 "Type": "Entity-type name",
-                "Description": "A Noise Volume is a program and data storage system that stores noise trading volume received from the Volume Router and triggers market adjustments to open KappaOptimalPools."
+                "Description": "A Noise Volume is a program and data storage system that stores noise trading volume received from the Volume Router and triggers market adjustments to open KappaOptimalPools.",
+                "Services": [
+                    {
+                        "Name": "updateCurvature(timeStamp)",
+                        "Triggering Events": [
+                            "A volumeRegimeChange(amount0, amount1, timeStamp) was triggered by the noise volume through the computable regime change process in response to the sendNoiseVolumeTrade(amount0, amount1, timeStamp) event by the volume router."
+                        ],
+                        "Delivered Services": [
+                            "A newMaxVolume is calculated",
+                            "It determines if the re-balance is deposit pr withdrawal through the curvatureShift(amount0, amount1, timeStamp) inidicator."
+                        ],
+                        "Assumptions": []
+                    },
+                    {
+                        "Name": "curvatureShiftIndicator(amount0, amount1, timeStamp)",
+                        "Triggering Events": [
+                            "internal function only called by the updateCurvature(timeStamp)"
+                        ],
+                        "Delivered Services": [
+                            "It labels the re-balance amounts (amount0, amount1) in the volumeRegimeChange(amount0, amount1, timeStamp) as either a deposit or a withdrawal"
+                        ],
+                        "Assumptions": []
+                    }
+                ]
             },
             {
                 "Name": "AutoUnsubscribtionSignaling(closedKappaOptimalPool, Subscription)",
