@@ -2,3 +2,9 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+
+remappings = [
+    "@OpenZeppelin/=lib/openzeppelin-contracts/contracts/",
+    "@ReactiveNetwork/=lib/reactive-smart-contract-demos/src/",
+    "@UniswapV2/=lib/uniswapv2-solc0.8/contracts/",
+]
