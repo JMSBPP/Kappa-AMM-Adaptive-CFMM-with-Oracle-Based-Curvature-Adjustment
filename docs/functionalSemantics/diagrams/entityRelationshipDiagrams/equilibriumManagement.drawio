@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="EY4dLf5hRYIaL871lM_0" name="Page-1">
-        <mxGraphModel dx="1834" dy="2323" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1792" dy="1879" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -38,7 +38,7 @@
                     <mxGeometry y="188" width="380" height="22" as="geometry"/>
                 </mxCell>
                 <mxCell id="25" value="OpenKappaOptimalPool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="1360" y="795" width="530" height="302" as="geometry"/>
+                    <mxGeometry x="1310" y="795" width="530" height="302" as="geometry"/>
                 </mxCell>
                 <mxCell id="26" value="+ STATE: {OPEN}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="25" vertex="1">
                     <mxGeometry y="26" width="530" height="22" as="geometry"/>
@@ -58,7 +58,7 @@
                 <mxCell id="106" value="event requestRebalancingAmounts()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="25" vertex="1">
                     <mxGeometry y="122" width="530" height="22" as="geometry"/>
                 </mxCell>
-                <mxCell id="257" value="+ event: Withdrawn(optimalPoolAddress[ ], LPAddress, amount, ISAUTO=TRUE): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="25">
+                <mxCell id="257" value="+ event: Withdrawn(optimalPoolAddress[ ], LPAddress, amount, ISAUTO=TRUE): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="25" vertex="1">
                     <mxGeometry y="144" width="530" height="26" as="geometry"/>
                 </mxCell>
                 <mxCell id="191" value="event closeMarket()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="25" vertex="1">
@@ -252,14 +252,11 @@
                 <mxCell id="204" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=17;" parent="1" vertex="1">
                     <mxGeometry x="2610" y="815" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="205" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=17;" parent="1" vertex="1">
-                    <mxGeometry x="1790" y="815" width="30" height="30" as="geometry"/>
-                </mxCell>
                 <mxCell id="207" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=17;" parent="1" vertex="1">
                     <mxGeometry x="2800" y="770" width="30" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="216" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=17;" parent="1" vertex="1">
-                    <mxGeometry x="1620" y="750" width="30" height="30" as="geometry"/>
+                    <mxGeometry x="1595" y="750" width="30" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="217" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=17;" parent="1" vertex="1">
                     <mxGeometry x="1970" y="620" width="30" height="30" as="geometry"/>

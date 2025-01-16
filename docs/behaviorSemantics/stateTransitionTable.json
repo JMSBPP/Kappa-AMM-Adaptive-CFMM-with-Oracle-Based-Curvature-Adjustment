@@ -1,0 +1,25 @@
+[
+    {
+        "stimuli": {
+            "event": "subscription.subscribe(UniswapPairAddress, liquidityProviderAddress)",
+            "guard": [
+                "isUniswapV2PairPair(UniswapPairAddress)",
+                "subscribers[UniswapPairAddress][liquidityProviderAddress] == false"
+            ]
+        },
+        "state": {
+            "entry": "checkSubscribePreconditions(UniswapPairAddress, liquidityProviderAddress)",
+            "input": "subscription.subscribing(UniswapPairAddress, liquidityProviderAddress)",
+            "exit": "checkSubscribePostconditions(UniswapPairAddress, liquidityProviderAddress)"
+        },
+        "response": [
+            "subscribersCount[UniswapPairAddress] += 1"
+        ],
+        "nextState": {
+            "entry": "",
+            "input": "",
+            "exit": "subscribers[UniswapPairAddress][liquidityProviderAddress] = true"
+        }
+    },
+    {}
+]
