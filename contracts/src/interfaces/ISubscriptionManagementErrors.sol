@@ -7,4 +7,8 @@ interface ISubscriptionManagementErrors {
     // a liquidity provider is subscribed to a pool
 
     error NotValidUniswapV2Pair();
+
+    error AlreadySubscribed();
+
+    error NotSubscribed();
 }

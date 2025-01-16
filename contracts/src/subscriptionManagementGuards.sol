@@ -5,12 +5,39 @@ import {IUniswapV2Pair} from "@UniswapV2/interfaces/IUniswapV2Pair.sol";
 import {IUniswapV2Factory} from "@UniswapV2/interfaces/IUniswapV2Factory.sol";
 import {subscriptionManagementState} from "./subscriptionManagementState.sol";
 import {subscriptionManagementInvariants} from "./subscriptionManagementInvariants.sol";
+import {ISubscriptionManagementErrors} from "./interfaces/ISubscriptionManagementErrors.sol";
+import {ISubscriptionManagementEvents} from "./interfaces/ISubscriptionManagementEvents.sol";
+
 contract subscriptionManagementGuards is
     subscriptionManagementState,
-    subscriptionManagementInvariants
+    subscriptionManagementInvariants,
+    ISubscriptionManagementErrors,
+    ISubscriptionManagementEvents
 {
     modifier onlyUniswapV2Pair(address _uniswapPairAddress) {
-        require(isUniswapV2Pair(_uniswapPairAddress), "Not a Uniswap V2 pair");
+        if (!isUniswapV2Pair(_uniswapPairAddress)) {
+            revert NotValidUniswapV2Pair();
+        }
+        _;
+    }
+
+    modifier onlyNotSubscribed(
+        address _uniswapPairAddress,
+        address liquidityProviderAddress
+    ) {
+        if (subscribers[_uniswapPairAddress][liquidityProviderAddress]) {
+            revert AlreadySubscribed();
+        }
+        _;
+    }
+
+    modifier onlySubscribed(
+        address _uniswapPairAddress,
+        address liquidityProviderAddress
+    ) {
+        if (!subscribers[_uniswapPairAddress][liquidityProviderAddress]) {
+            revert NotSubscribed();
+        }
         _;
     }
 

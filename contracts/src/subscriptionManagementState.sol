@@ -2,10 +2,14 @@
 pragma solidity ^0.8.0;
 
 contract subscriptionManagementState {
+    enum SubscriptionState {
+        SUBSCRIBING,
+        SUBSCRIBED
+    }
     //security:
     // How an attacker can modify a private mapping?
     //  What incentives would he has to do so?
-
+    SubscriptionState internal subscriptionState;
     mapping(address => mapping(address => bool)) internal subscribers;
     // protocol:
     //  UP TO HOW MANY SUBSCRIBERS DETERMINES uint(?) ?
@@ -14,18 +18,8 @@ contract subscriptionManagementState {
     //   What incentives would he has to do so?
     mapping(address => uint112) internal subscribersCount;
     //ENTRY EVENTS FOR SUBSCRIPTION
-    function checkSubscribePreConditions() external returns (bool) {
-        return true;
-    }
 
     //RECEIVE INPUT EVENT
-    function inputSubscribeEvent() external returns (bool) {
-        return true;
-    }
 
     //EXIT EVENTS FOR SUBSCRIPTION
-
-    function checkSubscribePostConditions() external returns (bool) {
-        return true;
-    }
 }

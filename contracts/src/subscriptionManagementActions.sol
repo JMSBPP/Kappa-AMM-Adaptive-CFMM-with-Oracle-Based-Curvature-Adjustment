@@ -5,4 +5,19 @@ import {subscriptionManagementPermissionedActions} from "./subscriptionManagemen
 
 contract subscriptionManagementActions is
     subscriptionManagementPermissionedActions
-{}
+{
+    function subscribe(
+        address uniswapPairAddress,
+        address liquidityProviderAddress
+    )
+        public
+        onlyNotSubscribed(uniswapPairAddress, liquidityProviderAddress)
+        onlyUniswapV2Pair(uniswapPairAddress)
+    {
+        subscriptionState = SubscriptionState.SUBSCRIBING;
+        setSubscriber(uniswapPairAddress, liquidityProviderAddress, true);
+        addSubscriber(uniswapPairAddress);
+        emit Subscribed(liquidityProviderAddress, uniswapPairAddress);
+        subscriptionState = SubscriptionState.SUBSCRIBED;
+    }
+}

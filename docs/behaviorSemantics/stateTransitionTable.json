@@ -1,25 +1,155 @@
 [
     {
-        "stimuli": {
-            "event": "subscription.subscribe(UniswapPairAddress, liquidityProviderAddress)",
-            "guard": [
-                "isUniswapV2PairPair(UniswapPairAddress)",
-                "subscribers[UniswapPairAddress][liquidityProviderAddress] == false"
+        "state": {
+            "name": "subscribing",
+            "type": "activity state",
+            "expression": [
+                "subscriptionState.SUBSCRIBING"
+            ],
+            "entry": [
+                {
+                    "name": "check pair address",
+                    "type": "activity state",
+                    "expression": "isUniswapV2Pair(address uniswapPairAddress)"
+                },
+                {
+                    "name": "check if it is already subscribed",
+                    "type": "activity state",
+                    "expression": "subscribers[uniswapPairAddress][liquidityProviderAddress]==false"
+                }
+            ],
+            "input": [
+                {
+                    "name": "request subscription",
+                    "type": "named event",
+                    "expression": "subscription.subscribe(UniswapPairAddress, liquidityProviderAddress)"
+                }
+            ],
+            "exit": [
+                {
+                    "name": "",
+                    "type": "",
+                    "expression": ""
+                }
             ]
         },
-        "state": {
-            "entry": "checkSubscribePreconditions(UniswapPairAddress, liquidityProviderAddress)",
-            "input": "subscription.subscribing(UniswapPairAddress, liquidityProviderAddress)",
-            "exit": "checkSubscribePostconditions(UniswapPairAddress, liquidityProviderAddress)"
-        },
-        "response": [
-            "subscribersCount[UniswapPairAddress] += 1"
-        ],
-        "nextState": {
-            "entry": "",
-            "input": "",
-            "exit": "subscribers[UniswapPairAddress][liquidityProviderAddress] = true"
-        }
-    },
-    {}
+        "Transitions": [
+            {
+                "name": "subscribe liquidity provider to UniswapV2Pair",
+                "type": "condition-changed event",
+                "expression": [
+                    "Subscribed(address liquidityProviderAddress, address uniswapPairAddress)"
+                ],
+                "guards": [
+                    {
+                        "name": "",
+                        "expresion": ""
+                    },
+                    {
+                        "name": "",
+                        "expression": ""
+                    }
+                ],
+                "output/response": [
+                    {
+                        "name": "incremenent subscriber counter",
+                        "type": "named event",
+                        "expression": "subscribersCount[UniswapPairAddress] += 1"
+                    },
+                    {
+                        "name": "register subscription",
+                        "type": "named event",
+                        "expression": "setSubscriber(address uniswapPairAddress, address liquidityProviderAddress, bool true)"
+                    }
+                ],
+                "nextState": {
+                    "name": "subscribed",
+                    "type": "activity state",
+                    "expression": [
+                        "subscriptionState.SUBSCRIBED"
+                    ],
+                    "entry": [
+                        {
+                            "name": "verify if it is registered as subscribed",
+                            "type": "activity state",
+                            "expression": "subscribers[UniswapPairAddress][liquidityProviderAddress] = true"
+                        }
+                    ],
+                    "input": [
+                        {
+                            "name": "subscribe liquidity provider to UniswapV2Pair",
+                            "type": "condition-changed event",
+                            "expression": "Subscribed(address liquidityProviderAddress, address uniswapPairAddress)"
+                        }
+                    ],
+                    "exit": [
+                        {
+                            "name": "",
+                            "type": "",
+                            "expression": ""
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Not Subscribed liquidity provider to UniswapV2Pair",
+                "type": "named event",
+                "expression": [
+                    "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                ],
+                "guards": [
+                    {
+                        "name": "",
+                        "expresion": ""
+                    },
+                    {
+                        "name": "",
+                        "expression": ""
+                    }
+                ],
+                "output/response": [
+                    {
+                        "name": "raise corresponding error",
+                        "type": "named event",
+                        "expression": [
+                            "NotValidUniswapV2Pair()",
+                            "AlreadySubscribed()"
+                        ]
+                    }
+                ],
+                "nextState": {
+                    "name": "Not Subscribed liquidity provider to UniswapV2Pair",
+                    "type": "activity state",
+                    "expression": [
+                        "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                    ],
+                    "entry": [
+                        {
+                            "name": "verify if it is not registered as subscribed",
+                            "type": "activity state",
+                            "expression": [
+                                "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                            ]
+                        }
+                    ],
+                    "input": [
+                        {
+                            "name": "Not Subscribed liquidity provider to UniswapV2Pair",
+                            "type": "activity state",
+                            "expression": [
+                                "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                            ]
+                        }
+                    ],
+                    "exit": [
+                        {
+                            "name": "",
+                            "type": "",
+                            "expression": []
+                        }
+                    ]
+                }
+            }
+        ]
+    }
 ]

@@ -2,11 +2,14 @@
 pragma solidity ^0.8.0;
 
 interface ISubscriptionManagementEvents {
-    //@notice: response of a successful subscription
+    //@notice: event-transition of a successful subscription
     event Subscribed(
         address indexed liquidityProviderAddress,
-        address indexed uniswapPairAddress,
-        uint256 indexed kappaPairAddress,
-        uint256 amount
+        address indexed uniswapPairAddress
+    );
+    //@notice:
+    event DeployedKappaPair(
+        address indexed liquidityProviderAddress,
+        address indexed uniswapPairAddress
     );
 }

@@ -2,13 +2,10 @@
 pragma solidity ^0.8.0;
 
 import {subscriptionManagementGuards} from "./subscriptionManagementGuards.sol";
-import {ISubscriptionManagementErrors} from "./interfaces/ISubscriptionManagementErrors.sol";
-import {ISubscriptionManagementEvents} from "./interfaces/ISubscriptionManagementEvents.sol";
-
+import {ReentrancyGuard} from "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
 contract subscriptionManagementPermissionedActions is
     subscriptionManagementGuards,
-    ISubscriptionManagementErrors,
-    ISubscriptionManagementEvents
+    ReentrancyGuard
 {
     /**
      * @notice Sets the subscriber status if the
@@ -28,7 +25,7 @@ contract subscriptionManagementPermissionedActions is
         address uniswapPairAddress,
         address liquidityProviderAddress,
         bool value
-    ) public onlyUniswapV2Pair(uniswapPairAddress) {
+    ) internal nonReentrant {
         subscribers[uniswapPairAddress][liquidityProviderAddress] = value;
     }
     /**
@@ -40,9 +37,7 @@ contract subscriptionManagementPermissionedActions is
      *
      * @param uniswapPairAddress address of the pair
      */
-    function addSubscriber(
-        address uniswapPairAddress
-    ) internal onlyUniswapV2Pair(uniswapPairAddress) {
+    function addSubscriber(address uniswapPairAddress) internal nonReentrant {
         subscribersCount[uniswapPairAddress] += 1;
     }
 }
