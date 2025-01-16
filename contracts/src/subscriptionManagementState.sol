@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
-import {subscriptionManagementGuards} from "./subscriptionManagementGuards.sol";
-
-contract subscriptionManagementState is subscriptionManagementGuards {
+contract subscriptionManagementState {
     //security:
     // How an attacker can modify a private mapping?
     //  What incentives would he has to do so?

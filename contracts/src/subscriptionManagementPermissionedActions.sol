@@ -1,10 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
-import {subscriptionManagementState} from "./subscriptionManagementState.sol";
+import {subscriptionManagementGuards} from "./subscriptionManagementGuards.sol";
+import {ISubscriptionManagementErrors} from "./interfaces/ISubscriptionManagementErrors.sol";
+import {ISubscriptionManagementEvents} from "./interfaces/ISubscriptionManagementEvents.sol";
 
 contract subscriptionManagementPermissionedActions is
-    subscriptionManagementState
+    subscriptionManagementGuards,
+    ISubscriptionManagementErrors,
+    ISubscriptionManagementEvents
 {
     /**
      * @notice Sets the subscriber status if the

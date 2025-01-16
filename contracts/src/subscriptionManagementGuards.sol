@@ -3,8 +3,12 @@ pragma solidity ^0.8.0;
 
 import {IUniswapV2Pair} from "@UniswapV2/interfaces/IUniswapV2Pair.sol";
 import {IUniswapV2Factory} from "@UniswapV2/interfaces/IUniswapV2Factory.sol";
-
-contract subscriptionManagementGuards {
+import {subscriptionManagementState} from "./subscriptionManagementState.sol";
+import {subscriptionManagementInvariants} from "./subscriptionManagementInvariants.sol";
+contract subscriptionManagementGuards is
+    subscriptionManagementState,
+    subscriptionManagementInvariants
+{
     modifier onlyUniswapV2Pair(address _uniswapPairAddress) {
         require(isUniswapV2Pair(_uniswapPairAddress), "Not a Uniswap V2 pair");
         _;
@@ -18,7 +22,13 @@ contract subscriptionManagementGuards {
      * @param uniswapPairAddress The address of the Uniswap pair to check.
      * @return bool True if the address is a valid Uniswap V2 pair, false otherwise.
      */
-
+    // security:
+    // How an attacker would attack this function,
+    // What incentives would he has to do so?
+    //protocol:
+    //
+    // gas:
+    //  is this gas efficient?
     function isUniswapV2Pair(
         address uniswapPairAddress
     ) internal view returns (bool) {
