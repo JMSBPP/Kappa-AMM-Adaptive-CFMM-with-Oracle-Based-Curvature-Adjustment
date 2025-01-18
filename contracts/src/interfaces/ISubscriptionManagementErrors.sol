@@ -11,4 +11,6 @@ interface ISubscriptionManagementErrors {
     error AlreadySubscribed();
 
     error NotSubscribed();
+
+    error PoolDeploymentLocked();
 }

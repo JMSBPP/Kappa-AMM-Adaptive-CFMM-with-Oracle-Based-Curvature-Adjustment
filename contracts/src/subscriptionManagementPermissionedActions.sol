@@ -40,4 +40,16 @@ contract subscriptionManagementPermissionedActions is
     function addSubscriber(address uniswapPairAddress) internal nonReentrant {
         subscribersCount[uniswapPairAddress] += 1;
     }
+
+    function deployKappaOptimalPool(
+        address _uniswapPairAddress
+    )
+        internal
+        PoolDeploymentLock(_uniswapPairAddress)
+        nonReentrant
+        returns (address _kappaPairAddress)
+    {
+        //LOW LEVEL DEPLOYMENT
+        _kappaPairAddress = address(0);
+    }
 }

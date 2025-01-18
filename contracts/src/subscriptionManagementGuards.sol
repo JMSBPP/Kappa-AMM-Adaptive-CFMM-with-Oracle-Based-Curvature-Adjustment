@@ -41,6 +41,13 @@ contract subscriptionManagementGuards is
         _;
     }
 
+    modifier PoolDeploymentLock(address _uniswapPairAddress) {
+        if (!(subscribersCount[_uniswapPairAddress] == 0)) {
+            revert PoolDeploymentLocked();
+        }
+        _;
+    }
+
     /**
      * @notice This function checks if the given address is a Uniswap V2 pair.
      * THIS FUNCTION ENABLES US TO USE THE

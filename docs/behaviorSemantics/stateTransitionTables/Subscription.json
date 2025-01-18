@@ -15,14 +15,19 @@
                 {
                     "name": "check if it is already subscribed",
                     "type": "activity state",
-                    "expression": "subscribers[uniswapPairAddress][liquidityProviderAddress]==false"
+                    "expression": "Subscribers[uniswapPairAddress][liquidityProviderAddress]==false"
+                },
+                {
+                    "name": "check positive ETH funding balance",
+                    "type": "activity state",
+                    "expression": "msg.value > 0"
                 }
             ],
             "input": [
                 {
                     "name": "request subscription",
                     "type": "named event",
-                    "expression": "subscription.subscribe(UniswapPairAddress, liquidityProviderAddress)"
+                    "expression": "subscription.requestSubscribe(UniswapPairAddress, liquidityProviderAddress)"
                 }
             ],
             "exit": [
@@ -35,58 +40,59 @@
         },
         "Transitions": [
             {
-                "name": "subscribe liquidity provider to UniswapV2Pair",
+                "name": "request subscription funding and deploy kappa pool",
                 "type": "condition-changed event",
                 "expression": [
-                    "Subscribed(address liquidityProviderAddress, address uniswapPairAddress)"
+                    "safeTransfer(from: subscription, to: supplyProcessor, amount: msg.value-gasCost-reactiveCost)",
+                    "getReactiveCost(_uniswapPairAddress, amount: reactiveCost)"
                 ],
                 "guards": [
                     {
-                        "name": "",
-                        "expresion": ""
+                        "name": "balance covers transaction cost and reactive network cost",
+                        "expresion": "validateFunding()==true"
                     },
                     {
-                        "name": "",
-                        "expression": ""
+                        "name": "no subscribers to pair",
+                        "expression": "subscribersCount[_uniswapPairAddress] == 0"
                     }
                 ],
                 "output/response": [
                     {
-                        "name": "incremenent subscriber counter",
+                        "name": "deploy kappa pool",
                         "type": "named event",
-                        "expression": "subscribersCount[UniswapPairAddress] += 1"
-                    },
-                    {
-                        "name": "register subscription",
-                        "type": "named event",
-                        "expression": "setSubscriber(address uniswapPairAddress, address liquidityProviderAddress, bool true)"
+                        "expression": "deployKappaPool(uniswapPairAddress)"
                     }
                 ],
                 "nextState": {
-                    "name": "subscribed",
+                    "name": "deploying kappa pool",
                     "type": "activity state",
                     "expression": [
-                        "subscriptionState.SUBSCRIBED"
+                        "kappaPool.INITIALIZING"
                     ],
                     "entry": [
                         {
-                            "name": "verify if it is registered as subscribed",
-                            "type": "activity state",
-                            "expression": "subscribers[UniswapPairAddress][liquidityProviderAddress] = true"
+                            "name": "is first subscriber",
+                            "type": "named event",
+                            "expression": "PoolDeploymentLock(_uniswapPairAddress)"
+                        },
+                        {
+                            "name": "get reactive cost",
+                            "type": "named event",
+                            "expression": "getReactiveCost(_uniswapPairAddress, amount)"
                         }
                     ],
                     "input": [
                         {
-                            "name": "subscribe liquidity provider to UniswapV2Pair",
-                            "type": "condition-changed event",
-                            "expression": "Subscribed(address liquidityProviderAddress, address uniswapPairAddress)"
+                            "name": "deploy kappa pool",
+                            "type": "named event",
+                            "expression": "deployKappaPool(uniswapPairAddress)"
                         }
                     ],
                     "exit": [
                         {
-                            "name": "",
-                            "type": "",
-                            "expression": ""
+                            "name": "get data needed",
+                            "type": "named event",
+                            "expression": "(chainId, uniswapPairAddress, amountToPayREACT)"
                         }
                     ]
                 }
@@ -113,7 +119,8 @@
                         "type": "named event",
                         "expression": [
                             "NotValidUniswapV2Pair()",
-                            "AlreadySubscribed()"
+                            "AlreadySubscribed()",
+                            "FundingFailed()"
                         ]
                     }
                 ],

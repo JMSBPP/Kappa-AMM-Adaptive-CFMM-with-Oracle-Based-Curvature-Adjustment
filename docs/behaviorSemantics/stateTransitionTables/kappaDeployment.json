@@ -1,0 +1,155 @@
+[
+    {
+        "state": {
+            "name": "deploying kappa pool",
+            "type": "condition-changed event",
+            "expression": [
+                "kappaPool.INITIALIZING"
+            ],
+            "entry": [
+                {
+                    "name": "is first subscriber",
+                    "type": "named event",
+                    "expression": "PoolDeploymentLock(_uniswapPairAddress)"
+                },
+                {
+                    "name": "get reactive cost",
+                    "type": "named event",
+                    "expression": "getReactiveCost(_uniswapPairAddress, amount)"
+                }
+            ],
+            "input": [
+                {
+                    "name": "deploy kappa pool",
+                    "type": "named event",
+                    "expression": "deployKappaPool(uniswapPairAddress)"
+                }
+            ],
+            "exit": [
+                {
+                    "name": "get data needed",
+                    "type": "named event",
+                    "expression": "getReactiveNetworkSubData()->(chainId, uniswapPairAddress, amountToPayREACT)"
+                }
+            ]
+        },
+        "Transitions": [
+            {
+                "name": "incremenent subscriber counter",
+                "type": "named event",
+                "expression": [
+                    "addSubscriber(uniswapPairAddress)"
+                ],
+                "guards": [
+                    {
+                        "name": "kappa pool is initializing",
+                        "expresion": "kappaPool.INITIALIZING"
+                    },
+                    {
+                        "name": "",
+                        "expression": ""
+                    }
+                ],
+                "output/response": [
+                    {
+                        "name": "subscribe to UniswapV2Pair events",
+                        "type": "named event",
+                        "expression": "reactiveNetworkServiceContract.subscribe(chainID, uniswapPairAddress)"
+                    },
+                    {
+                        "name": "",
+                        "type": "",
+                        "expression": ""
+                    }
+                ],
+                "nextState": {
+                    "name": "subscribed",
+                    "type": "activity state",
+                    "expression": [
+                        "SubscriptioState.SUBSCRIBED"
+                    ],
+                    "entry": [
+                        {
+                            "name": "",
+                            "type": "",
+                            "expression": ""
+                        }
+                    ],
+                    "input": [
+                        {
+                            "name": "set subscriber to true",
+                            "type": "condition-changed event",
+                            "expression": "setSubscriber(uniswapPairAddress, liquidityProviderAddress, true)"
+                        }
+                    ],
+                    "exit": [
+                        {
+                            "name": "",
+                            "type": "",
+                            "expression": ""
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "",
+                "type": "",
+                "expression": [
+                    ""
+                ],
+                "guards": [
+                    {
+                        "name": "",
+                        "expresion": ""
+                    },
+                    {
+                        "name": "",
+                        "expression": ""
+                    }
+                ],
+                "output/response": [
+                    {
+                        "name": "",
+                        "type": "",
+                        "expression": [
+                            "",
+                            ""
+                        ]
+                    }
+                ],
+                "nextState": {
+                    "name": "",
+                    "type": "",
+                    "expression": [
+                        ""
+                    ],
+                    "entry": [
+                        {
+                            "name": "",
+                            "type": "",
+                            "expression": [
+                                ""
+                            ]
+                        }
+                    ],
+                    "input": [
+                        {
+                            "name": "",
+                            "type": "",
+                            "expression": [
+                                ""
+                            ]
+                        }
+                    ],
+                    "exit": [
+                        {
+                            "name": "",
+                            "type": "",
+                            "expression": []
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+]

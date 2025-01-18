@@ -9,7 +9,8 @@ interface ISubscriptionManagementEvents {
     );
     //@notice:
     event DeployedKappaPair(
-        address indexed liquidityProviderAddress,
-        address indexed uniswapPairAddress
+        address indexed uniswapPairAddress,
+        address indexed kappaPair,
+        uint32 indexed blockTimestamp
     );
 }
