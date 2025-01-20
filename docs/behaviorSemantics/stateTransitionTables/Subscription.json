@@ -44,7 +44,6 @@
                 "type": "condition-changed event",
                 "expression": [
                     "safeTransfer(from: subscription, to: supplyProcessor, amount: msg.value-gasCost-reactiveCost)",
-                    "getReactiveCost(_uniswapPairAddress, amount: reactiveCost)"
                 ],
                 "guards": [
                     {
@@ -92,7 +91,7 @@
                         {
                             "name": "get data needed",
                             "type": "named event",
-                            "expression": "(chainId, uniswapPairAddress, amountToPayREACT)"
+                            "expression": "getReactiveNetworkSubData()->(chainId, uniswapPairAddress, amountToPayREACT)"
                         }
                     ]
                 }

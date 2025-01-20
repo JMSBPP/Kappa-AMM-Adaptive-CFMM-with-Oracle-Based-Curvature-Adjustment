@@ -3,10 +3,16 @@ pragma solidity ^0.8.0;
 
 import {subscriptionManagementGuards} from "./subscriptionManagementGuards.sol";
 import {ReentrancyGuard} from "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
+import {AbstractPausableReactive} from "../lib/reactive-smart-contract-demos/src/AbstractPausableReactive.sol";
+
 contract subscriptionManagementPermissionedActions is
     subscriptionManagementGuards,
-    ReentrancyGuard
+    ReentrancyGuard,
+    AbstractPausableReactive
 {
+    uint256 private constant UNISWAP_V2_TOPIC_0 =
+        0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1;
+
     /**
      * @notice Sets the subscriber status if the
      * uniswap pair address is valid
@@ -51,5 +57,40 @@ contract subscriptionManagementPermissionedActions is
     {
         //LOW LEVEL DEPLOYMENT
         _kappaPairAddress = address(0);
+    }
+    function partiallySubscribeToPair(
+        uint256 chainId,
+        address _uniswapPairAddress
+    ) public onlyUniswapV2Pair(_uniswapPairAddress) returns (bool) {
+        bytes memory payload = abi.encodeWithSignature(
+            "subscribe(uint256,address,uint256,uint256,uint256,uint256)",
+            chainId,
+            _uniswapPairAddress,
+            UNISWAP_V2_TOPIC_0,
+            REACTIVE_IGNORE,
+            REACTIVE_IGNORE,
+            REACTIVE_IGNORE
+        );
+        (bool subscription_result, ) = address(service).call(payload);
+        if (subscription_result) {
+            return true;
+        }
+        return false;
+    }
+
+    receive() external payable {}
+
+    function react(
+        uint256 chain_id,
+        address _contract,
+        uint256 topic_0,
+        uint256 topic_1,
+        uint256 topic_2,
+        uint256 topic_3,
+        bytes calldata data,
+        uint256 block_number,
+        uint256 op_code
+    ) external {
+        uint256 hel = uint256(2);
     }
 }
