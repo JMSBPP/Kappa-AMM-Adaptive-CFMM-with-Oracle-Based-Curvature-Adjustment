@@ -3,12 +3,12 @@ pragma solidity ^0.8.0;
 
 import {subscriptionManagementGuards} from "./subscriptionManagementGuards.sol";
 import {ReentrancyGuard} from "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
-import {AbstractPausableReactive} from "../lib/reactive-smart-contract-demos/src/AbstractPausableReactive.sol";
+import {AbstractReactive} from "../lib/reactive-smart-contract-demos/src/AbstractReactive.sol";
 
 contract subscriptionManagementPermissionedActions is
     subscriptionManagementGuards,
     ReentrancyGuard,
-    AbstractPausableReactive
+    AbstractReactive
 {
     uint256 private constant UNISWAP_V2_TOPIC_0 =
         0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1;
