@@ -13,4 +13,8 @@ interface ISubscriptionManagementErrors {
     error NotSubscribed();
 
     error PoolDeploymentLocked();
+
+    error isNotFisrtSubscription();
+
+    error subscriptionFailed();
 }

@@ -11,6 +11,7 @@ contract subscriptionManagementActions is
         address liquidityProviderAddress
     )
         public
+        payable
         onlyNotSubscribed(uniswapPairAddress, liquidityProviderAddress)
         onlyUniswapV2Pair(uniswapPairAddress)
     {

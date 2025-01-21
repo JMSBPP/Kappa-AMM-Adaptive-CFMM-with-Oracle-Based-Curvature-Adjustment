@@ -9,18 +9,18 @@
             "entry": [
                 {
                     "name": "check pair address",
-                    "type": "activity state",
+                    "type": "named event",
                     "expression": "isUniswapV2Pair(address uniswapPairAddress)"
                 },
                 {
                     "name": "check if it is already subscribed",
-                    "type": "activity state",
+                    "type": "named event",
                     "expression": "Subscribers[uniswapPairAddress][liquidityProviderAddress]==false"
                 },
                 {
-                    "name": "check positive ETH funding balance",
-                    "type": "activity state",
-                    "expression": "msg.value > 0"
+                    "name": "check if balance sent can cover reaactive network cost",
+                    "type": "named event",
+                    "expression": "msg.value > getReactiveCost()"
                 }
             ],
             "input": [
