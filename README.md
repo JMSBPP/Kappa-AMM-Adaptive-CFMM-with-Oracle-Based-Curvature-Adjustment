@@ -30,3 +30,11 @@ cd contracts
 forge build
 ```
 
+## Testing
+
+```git
+forge test
+```
+
+
+
