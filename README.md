@@ -1,7 +1,7 @@
 # KAPPA: Adaptive AMM Curvature through Oracle-Driven Market Calibration
 
 <div style="text-align: center;">
-  <img src="images/kappa logo.png" alt="Description" width="300"/>
+  <img src="docs/images/kappa logo.png" alt="Description" width="300"/>
 </div>
 
 ## Overview
