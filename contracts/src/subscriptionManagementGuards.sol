@@ -48,6 +48,13 @@ contract subscriptionManagementGuards is
         _;
     }
 
+    modifier hasValidVolumeRouter() {
+        if (getVolumeRouter() == address(0)) {
+            revert InvalidVolumeRouter();
+            _;
+        }
+    }
+
     /**
      * @notice This function checks if the given address is a Uniswap V2 pair.
      * THIS FUNCTION ENABLES US TO USE THE

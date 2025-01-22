@@ -6,9 +6,16 @@ contract subscriptionManagementState {
         SUBSCRIBING,
         SUBSCRIBED
     }
+
+    enum deploymentState {
+        INITIALIZING,
+        NOT_INITIALIZING
+    }
+
     //security:
     // How an attacker can modify a private mapping?
     //  What incentives would he has to do so?
+
     SubscriptionState internal subscriptionState;
     mapping(address => mapping(address => bool)) internal subscribers;
     // protocol:
@@ -22,4 +29,14 @@ contract subscriptionManagementState {
     //RECEIVE INPUT EVENT
 
     //EXIT EVENTS FOR SUBSCRIPTION
+
+    address private volumeRouter;
+
+    function setVolumeRouter(address _volumeRouter) internal {
+        volumeRouter = _volumeRouter;
+    }
+
+    function getVolumeRouter() internal view returns (address) {
+        return volumeRouter;
+    }
 }

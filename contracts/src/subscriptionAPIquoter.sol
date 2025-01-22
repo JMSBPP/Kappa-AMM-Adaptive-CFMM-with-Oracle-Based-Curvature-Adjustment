@@ -2,25 +2,28 @@
 pragma solidity ^0.8.0;
 
 import {AbstractPausableReactive} from "../lib/reactive-smart-contract-demos/src/AbstractPausableReactive.sol";
-import {subscriptionManagementPermissionedActions} from "./subscriptionManagementPermissionedActions.sol";
+import {subscriptionManagementGuards} from "./subscriptionManagementGuards.sol";
 import {payableWrapper} from "./payableWrapper.sol";
+
 //THIS CONTRACT IS ONLY CALLABLE BY
 //THE SUBSCRIPTION MANAGER ACTIONS
-abstract contract subscriptionAPIquoter is
-    subscriptionManagementPermissionedActions,
+contract subscriptionAPIquoter is
+    subscriptionManagementGuards,
     AbstractPausableReactive,
     payableWrapper
 {
+    Subscription[] private susbcriptions;
+
     function getReactiveCost(
         address _uniswapPairAddress,
         bool isFirstSubscription
-    ) public payable returns (uint256 reactiveCost) {
+    ) external payable returns (uint256 reactiveCost) {
         if (!(isFirstSubscription == getSubscription(_uniswapPairAddress))) {
-            revert isNotFisrtSubscription();
+            revert isNotFirstSubscription();
         }
 
         if (isFirstSubscription) {
-            reactiveCost = 0;
+            reactiveCost = partiallySubscribe(_uniswapPairAddress);
         }
     }
     function getSubscription(
@@ -103,10 +106,43 @@ abstract contract subscriptionAPIquoter is
         (bool subscriptionResultMint, ) = address(service).call(payloadMint);
         if (subscriptionResultMint) {
             cummulativeDebt = cummulativeDebt + debt(address(this));
+            susbcriptions.push(
+                Subscription({
+                    chain_id: CHAIN_ID,
+                    _contract: _uniswapPairAddress,
+                    topic_0: UNISWAP_V2_MINT_TOPIC_0,
+                    topic_1: REACTIVE_IGNORE,
+                    topic_2: REACTIVE_IGNORE,
+                    topic_3: REACTIVE_IGNORE
+                })
+            );
         } else {
             revert subscriptionFailed();
         }
     }
 
     receive() external payable {}
+
+    function react(
+        uint256 chain_id,
+        address _contract,
+        uint256 topic_0,
+        uint256 topic_1,
+        uint256 topic_2,
+        uint256 topic_3,
+        bytes calldata data,
+        uint256 block_number,
+        uint256 op_code
+    ) external {
+        uint256 result = 0;
+    }
+
+    function getPausableSubscriptions()
+        internal
+        view
+        override
+        returns (Subscription[] memory)
+    {
+        return susbcriptions;
+    }
 }

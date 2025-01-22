@@ -3,11 +3,22 @@ pragma solidity ^0.8.0;
 
 import {subscriptionManagementGuards} from "./subscriptionManagementGuards.sol";
 import {ReentrancyGuard} from "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
+import {subscriptionAPIquoter} from "./subscriptionAPIquoter.sol";
+import {kappaOptimalPool} from "./kappaOptimalPool.sol";
 
 contract subscriptionManagementPermissionedActions is
     subscriptionManagementGuards,
     ReentrancyGuard
 {
+    bytes32 public constant KAPPA_HASH =
+        keccak256(type(kappaOptimalPool).creationCode);
+
+    address immutable APIQuoterAddress;
+
+    constructor(address _APIQuoterAddress) {
+        APIQuoterAddress = _APIQuoterAddress;
+    }
+
     /**
      * @notice Sets the subscriber status if the
      * uniswap pair address is valid
@@ -48,9 +59,37 @@ contract subscriptionManagementPermissionedActions is
         internal
         PoolDeploymentLock(_uniswapPairAddress)
         nonReentrant
+        hasValidVolumeRouter
         returns (address _kappaPairAddress)
     {
-        //LOW LEVEL DEPLOYMENT
-        _kappaPairAddress = address(0);
+        //get reactive cost
+        bytes memory payload = abi.encodeWithSignature(
+            "getReactiveCost(address,bool)",
+            _uniswapPairAddress,
+            true
+        );
+        (bool res, bytes memory data) = address(APIQuoterAddress).call{
+            value: msg.value
+        }(payload);
+
+        if (res) {
+            uint256 cost = abi.decode(data, (uint256));
+            if (msg.value <= cost) {
+                revert InsufficienFundsToSubscribe();
+            }
+            address volumeRouter = getVolumeRouter();
+
+            _kappaPairAddress = address(
+                new kappaOptimalPool{
+                    salt: keccak256(abi.encodePacked(_uniswapPairAddress))
+                }(volumeRouter)
+            );
+
+            emit DeployedKappaPair(
+                _uniswapPairAddress,
+                _kappaPairAddress,
+                block.timestamp
+            );
+        }
     }
 }

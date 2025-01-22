@@ -2,10 +2,12 @@
 pragma solidity ^0.8.0;
 
 import {subscriptionManagementPermissionedActions} from "./subscriptionManagementPermissionedActions.sol";
-
+import {subscriptionAPIquoter} from "./subscriptionAPIquoter.sol";
 contract subscriptionManagementActions is
     subscriptionManagementPermissionedActions
 {
+    constructor(address _API) subscriptionManagementPermissionedActions(_API) {}
+
     function requestSubscribe(
         address uniswapPairAddress,
         address liquidityProviderAddress
@@ -17,6 +19,7 @@ contract subscriptionManagementActions is
     {
         subscriptionState = SubscriptionState.SUBSCRIBING;
         // rest of the pre-conditions
+        //1.verify
 
         //...
         //...

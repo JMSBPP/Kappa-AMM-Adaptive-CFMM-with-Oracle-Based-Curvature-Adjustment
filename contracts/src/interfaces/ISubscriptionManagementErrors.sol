@@ -14,7 +14,11 @@ interface ISubscriptionManagementErrors {
 
     error PoolDeploymentLocked();
 
-    error isNotFisrtSubscription();
+    error isNotFirstSubscription();
 
     error subscriptionFailed();
+
+    error InsufficienFundsToSubscribe();
+
+    error InvalidVolumeRouter();
 }

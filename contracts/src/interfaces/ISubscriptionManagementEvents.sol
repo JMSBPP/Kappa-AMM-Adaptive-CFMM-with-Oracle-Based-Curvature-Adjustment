@@ -11,6 +11,6 @@ interface ISubscriptionManagementEvents {
     event DeployedKappaPair(
         address indexed uniswapPairAddress,
         address indexed kappaPair,
-        uint32 indexed blockTimestamp
+        uint256 indexed blockTimestamp
     );
 }
