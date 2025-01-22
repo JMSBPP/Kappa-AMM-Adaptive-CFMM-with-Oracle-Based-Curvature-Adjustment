@@ -29,12 +29,4 @@ git clone https://github.com/JMSBPP/Kappa-AMM-Adaptive-CFMM-with-Oracle-Based-Cu
 cd contracts
 forge build
 ```
-## Problem Description
-
-## Solution
-
-
-
-## References
-
 
