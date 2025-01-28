@@ -54,7 +54,8 @@ contract subscriptionManagementPermissionedActions is
     }
 
     function deployKappaOptimalPool(
-        address _uniswapPairAddress
+        address _uniswapPairAddress,
+        address liqudidityProviderAddress
     )
         internal
         PoolDeploymentLock(_uniswapPairAddress)
@@ -91,5 +92,11 @@ contract subscriptionManagementPermissionedActions is
                 block.timestamp
             );
         }
+    }
+
+    function setToReadyToReceiveSubscribers(
+        address liquidityProviderAddress
+    ) internal nonReentrant {
+        subscriptionState[liquidityProviderAddress] = SubscriptionState.IDLE;
     }
 }

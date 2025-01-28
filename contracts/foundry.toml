@@ -8,3 +8,7 @@ remappings = [
     "@ReactiveNetwork/=lib/reactive-smart-contract-demos/src/",
     "@UniswapV2/=lib/uniswapv2-solc0.8/contracts/",
 ]
+
+[rpc_endpoints]
+sepolia = "${SEPOLIA_RPC}"
+reactive = "${REACTIVE_RPC}"

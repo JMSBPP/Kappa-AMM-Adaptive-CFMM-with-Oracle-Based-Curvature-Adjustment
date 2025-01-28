@@ -17,7 +17,8 @@ contract subscriptionManagementActions is
         onlyNotSubscribed(uniswapPairAddress, liquidityProviderAddress)
         onlyUniswapV2Pair(uniswapPairAddress)
     {
-        subscriptionState = SubscriptionState.SUBSCRIBING;
+        subscriptionState[liquidityProviderAddress] = SubscriptionState
+            .SUBSCRIBING;
         // rest of the pre-conditions
         //1.verify
 

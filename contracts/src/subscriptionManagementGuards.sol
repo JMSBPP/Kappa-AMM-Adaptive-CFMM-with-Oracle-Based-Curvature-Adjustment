@@ -55,6 +55,28 @@ contract subscriptionManagementGuards is
         }
     }
 
+    modifier setToIddlePermission(address liquidityProviderAddress) {
+        if (
+            !(subscriptionState[liquidityProviderAddress] ==
+                SubscriptionState.SUBSCRIBED ||
+                subscriptionState[liquidityProviderAddress] ==
+                SubscriptionState.FAILED)
+        ) {
+            revert NotAbletoSetToIdle();
+        }
+        _;
+    }
+
+    modifier receivingSubscribers(address liquidityProviderAddress) {
+        if (
+            subscriptionState[liquidityProviderAddress] !=
+            SubscriptionState.IDLE
+        ) {
+            revert UnableToReceiveSubscribers();
+        }
+        _;
+    }
+
     /**
      * @notice This function checks if the given address is a Uniswap V2 pair.
      * THIS FUNCTION ENABLES US TO USE THE

@@ -30,6 +30,11 @@
                     "name": "get data needed",
                     "type": "named event",
                     "expression": "getReactiveNetworkSubData()->(chainId, uniswapPairAddress, amountToPayREACT)"
+                },
+                {
+                    "name": "emit pool deployed event",
+                    "type": "named event",
+                    "expression": "DeployedKappaPair(_uniswapPairAddress, kappaoOptimalPoolAddress, timeStamp)"
                 }
             ]
         },
@@ -44,10 +49,6 @@
                     {
                         "name": "kappa pool is initializing",
                         "expresion": "kappaPool.INITIALIZING"
-                    },
-                    {
-                        "name": "",
-                        "expression": ""
                     }
                 ],
                 "output/response": [
@@ -55,11 +56,6 @@
                         "name": "subscribe to UniswapV2Pair events",
                         "type": "named event",
                         "expression": "reactiveNetworkServiceContract.subscribe(chainID, uniswapPairAddress)"
-                    },
-                    {
-                        "name": "",
-                        "type": "",
-                        "expression": ""
                     }
                 ],
                 "nextState": {
@@ -70,9 +66,9 @@
                     ],
                     "entry": [
                         {
-                            "name": "",
-                            "type": "",
-                            "expression": ""
+                            "name": "emit subscribed event",
+                            "type": "named event",
+                            "expression": "Subscribed(_unisapPairAddress, liquidityProviderAddress, kappaoOptimalPoolAddress)"
                         }
                     ],
                     "input": [
@@ -84,68 +80,9 @@
                     ],
                     "exit": [
                         {
-                            "name": "",
-                            "type": "",
-                            "expression": ""
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "",
-                "type": "",
-                "expression": [
-                    ""
-                ],
-                "guards": [
-                    {
-                        "name": "",
-                        "expresion": ""
-                    },
-                    {
-                        "name": "",
-                        "expression": ""
-                    }
-                ],
-                "output/response": [
-                    {
-                        "name": "",
-                        "type": "",
-                        "expression": [
-                            "",
-                            ""
-                        ]
-                    }
-                ],
-                "nextState": {
-                    "name": "",
-                    "type": "",
-                    "expression": [
-                        ""
-                    ],
-                    "entry": [
-                        {
-                            "name": "",
-                            "type": "",
-                            "expression": [
-                                ""
-                            ]
-                        }
-                    ],
-                    "input": [
-                        {
-                            "name": "",
-                            "type": "",
-                            "expression": [
-                                ""
-                            ]
-                        }
-                    ],
-                    "exit": [
-                        {
-                            "name": "",
-                            "type": "",
-                            "expression": []
+                            "name": "set to ready to receive subscribers",
+                            "type": "condition-changed event",
+                            "expression": "setToReadyToReceiveSubscribers()"
                         }
                     ]
                 }

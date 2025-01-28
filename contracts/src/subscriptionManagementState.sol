@@ -3,8 +3,10 @@ pragma solidity ^0.8.0;
 
 contract subscriptionManagementState {
     enum SubscriptionState {
+        IDLE,
         SUBSCRIBING,
-        SUBSCRIBED
+        SUBSCRIBED,
+        FAILED
     }
 
     enum deploymentState {
@@ -16,7 +18,7 @@ contract subscriptionManagementState {
     // How an attacker can modify a private mapping?
     //  What incentives would he has to do so?
 
-    SubscriptionState internal subscriptionState;
+    mapping(address => SubscriptionState) internal subscriptionState;
     mapping(address => mapping(address => bool)) internal subscribers;
     // protocol:
     //  UP TO HOW MANY SUBSCRIBERS DETERMINES uint(?) ?
@@ -32,6 +34,7 @@ contract subscriptionManagementState {
 
     address private volumeRouter;
 
+    //this function requires permission
     function setVolumeRouter(address _volumeRouter) internal {
         volumeRouter = _volumeRouter;
     }

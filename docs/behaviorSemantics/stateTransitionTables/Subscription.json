@@ -8,6 +8,11 @@
             ],
             "entry": [
                 {
+                    "name": "is it receiving subscribers",
+                    "type": "named event",
+                    "expression": "receivingSubscribers()"
+                },
+                {
                     "name": "check pair address",
                     "type": "named event",
                     "expression": "isUniswapV2Pair(address uniswapPairAddress)"
@@ -32,23 +37,23 @@
             ],
             "exit": [
                 {
-                    "name": "",
-                    "type": "",
-                    "expression": ""
+                    "name": "no subscribers to pair",
+                    "type": "condititon-changed event",
+                    "expression": "subscribersCount[_uniswapPairAddress] == 0"
                 }
             ]
         },
         "Transitions": [
             {
-                "name": "request subscription funding and deploy kappa pool",
+                "name": "transfer deployment cost",
                 "type": "condition-changed event",
                 "expression": [
                     "safeTransfer(from: subscription, to: supplyProcessor, amount: msg.value-gasCost-reactiveCost)",
                 ],
                 "guards": [
                     {
-                        "name": "balance covers transaction cost and reactive network cost",
-                        "expresion": "validateFunding()==true"
+                        "name": "balance covers transaction pool deployement cost",
+                        "expresion": "msg.value > gasCost + reactiveCost"
                     },
                     {
                         "name": "no subscribers to pair",
@@ -97,24 +102,35 @@
                 }
             },
             {
-                "name": "Not Subscribed liquidity provider to UniswapV2Pair",
+                "name": "Error subscribing liquidity provider",
                 "type": "named event",
                 "expression": [
-                    "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                    "subscriptionState.FAILED"
                 ],
                 "guards": [
                     {
-                        "name": "",
-                        "expresion": ""
+                        "name": "Not valid Uniswap Address",
+                        "expresion": "isUniswapPair(_uniswapPairAddress)==false"
                     },
                     {
-                        "name": "",
-                        "expression": ""
+                        "name": "Liquidity provider already subscribed to UniswapV2Pair",
+                        "expression": "Subscribers[uniswapPairAddress][liquidityProviderAddress]==false"
+                    },
+                    {
+                        "name": "Funding failed",
+                        "expression": "msg.value < getReactiveCost() + gasCost"
                     }
                 ],
                 "output/response": [
                     {
-                        "name": "raise corresponding error",
+                        "name": "set to ready to receive subscribers",
+                        "type": "condition-changed event",
+                        "expression": [
+                            "setToReadyToReceiveSubscribers()"
+                        ]
+                    },
+                    {
+                        "name": "subscription Failed",
                         "type": "named event",
                         "expression": [
                             "NotValidUniswapV2Pair()",
@@ -124,26 +140,26 @@
                     }
                 ],
                 "nextState": {
-                    "name": "Not Subscribed liquidity provider to UniswapV2Pair",
+                    "name": "ready to receive subscribers",
                     "type": "activity state",
                     "expression": [
-                        "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                        "subscriptionState.IDLE"
                     ],
                     "entry": [
                         {
-                            "name": "verify if it is not registered as subscribed",
-                            "type": "activity state",
+                            "name": "",
+                            "type": "",
                             "expression": [
-                                "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                                ""
                             ]
                         }
                     ],
                     "input": [
                         {
-                            "name": "Not Subscribed liquidity provider to UniswapV2Pair",
-                            "type": "activity state",
+                            "name": "set to ready to receive subscribers",
+                            "type": "condition-changed event",
                             "expression": [
-                                "subscribers[UniswapPairAddress][liquidityProviderAddress] = false"
+                                "setToReadyToReceiveSubscribers()"
                             ]
                         }
                     ],

@@ -19,8 +19,8 @@ It replicates existing pools and assigns the optimal curvature to the underlying
 
 - **Discussion**: Kappa responds to the state of the Uniswap V2 pool to ensure that passive liquidity providers supply an optimal quantity of liquidity based on current market conditions. Thus, the Kappa optimal pool system can be considered a dynamic optimizer for liquidity providers and a market-making tool for the Uniswap V2 protocol.
 
-### Technical documentation: [Technical Documentation](https://drive.google.com/file/d/1myh-z2kM6JcR-JftVUKVxErVNJtpqPBr/view?usp=sharing)  
-### Software documentation: [Software Documentation](https://github.com/JMSBPP/Kappa-AMM-Adaptive-CFMM-with-Oracle-Based-Curvature-Adjustment/tree/main/docs)
+* [Technical Documentation](https://drive.google.com/file/d/1myh-z2kM6JcR-JftVUKVxErVNJtpqPBr/view?usp=sharing)  
+*  [Software Documentation](https://github.com/JMSBPP/Kappa-AMM-Adaptive-CFMM-with-Oracle-Based-Curvature-Adjustment/tree/main/docs)
 
 ## Quickstart
 

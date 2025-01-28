@@ -21,4 +21,8 @@ interface ISubscriptionManagementErrors {
     error InsufficienFundsToSubscribe();
 
     error InvalidVolumeRouter();
+
+    error NotAbletoSetToIdle();
+
+    error UnableToReceiveSubscribers();
 }
