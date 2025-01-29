@@ -10,7 +10,7 @@
                 {
                     "name": "is it receiving subscribers",
                     "type": "named event",
-                    "expression": "receivingSubscribers()"
+                    "expression": "receivingSubscribers(liquidityProviderAddress)"
                 },
                 {
                     "name": "check pair address",
@@ -32,7 +32,7 @@
                 {
                     "name": "request subscription",
                     "type": "named event",
-                    "expression": "subscription.requestSubscribe(UniswapPairAddress, liquidityProviderAddress)"
+                    "expression": "subscription.requestSubscribe(UniswapPairAddress, liquidityProviderAddress, subscriptionTime)"
                 }
             ],
             "exit": [
