@@ -5,6 +5,6 @@ import {kappaPoolStates} from "./kappaPoolState.sol";
 import {IkappaErrors} from "./interfaces/IkappaErrors.sol";
 import {IkappaEvents} from "./interfaces/IkappaEvents.sol";
 
-contract kappaOptimalPool is kappaPoolStates, IkappaErrors, IkappaEvents {
-    constructor(address volumeRouter) kappaPoolStates(volumeRouter) {}
+contract openKappaOptimalPool is kappaPoolStates, IkappaErrors, IkappaEvents {
+    constructor(address _volumeRouter) {}
 }

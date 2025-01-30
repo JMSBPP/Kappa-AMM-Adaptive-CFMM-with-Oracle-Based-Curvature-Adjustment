@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import {Test} from "../lib/forge-std/src/Test.sol";
-import {subscriptionManagementActions} from "../src/subscriptionManagementActions.sol";
-import {subscriptionAPIquoter} from "../src/subscriptionAPIquoter.sol";
+import {subscriptionManagementActions} from "../src/subscriptionManagement/subscriptionManagementActions.sol";
+import {subscriptionManagementOffchain} from "../src/subscriptionManagement/subscriptionManagementOffchain.sol";
 
 contract subscribingDeployKappaPoolTest is Test {
     struct ChainEndpoints {
@@ -18,14 +18,18 @@ contract subscribingDeployKappaPoolTest is Test {
     subscriptionManagementActions public actions;
 
     //-------REACTIVE CHAIN---------------
-    subscriptionAPIquoter public apiQuoter;
+    subscriptionManagementOffchain public offChain;
 
     function setUp() public {
-        apiQuoter = new subscriptionAPIquoter();
+        offChain = new subscriptionManagementOffchain();
         endpoints.reactive = vm.createSelectFork(vm.rpcUrl("reactive"));
-        actions = new subscriptionManagementActions(address(apiQuoter));
-        endpoints.origin = vm.createSelectFork(vm.rpcUrl("sepolia"));
+        actions = new subscriptionManagementActions();
+        endpoints.origin = vm.createSelectFork(vm.rpcUrl("reactive"));
     }
 
     // Add your test functions here
+
+    //VERIFY THE DEFAULT STATE FOR ANY ASPIRING SUBSCRIBER IS IDLE
+    //VERIFY THE UNISWAP PAIR ADDRESS ARE CORRECTLY CAPTURED
+    //VERIFY THAT IT CHECKS IF IT IS ALREADY SUBSCRIBED
 }

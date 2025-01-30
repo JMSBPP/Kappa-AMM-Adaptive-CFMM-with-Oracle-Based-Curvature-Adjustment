@@ -18,10 +18,4 @@ contract kappaPoolStates {
     Categorization private categorization;
     KappaPoolState private state;
     uint256 public curvature;
-
-    address immutable volumeRouter;
-
-    constructor(address _volumeRouter) {
-        volumeRouter = _volumeRouter;
-    }
 }

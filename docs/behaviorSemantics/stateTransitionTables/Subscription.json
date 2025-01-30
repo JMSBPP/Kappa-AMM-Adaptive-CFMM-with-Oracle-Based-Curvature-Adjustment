@@ -32,7 +32,7 @@
                 {
                     "name": "request subscription",
                     "type": "named event",
-                    "expression": "subscription.requestSubscribe(UniswapPairAddress, liquidityProviderAddress, subscriptionTime)"
+                    "expression": "subscription.requestSubscribe(UniswapPairAddress, liquidityProviderAddress, MaxsubscriptionTime)"
                 }
             ],
             "exit": [

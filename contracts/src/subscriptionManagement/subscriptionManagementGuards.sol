@@ -25,7 +25,7 @@ contract subscriptionManagementGuards is
         address _uniswapPairAddress,
         address liquidityProviderAddress
     ) {
-        if (subscribers[_uniswapPairAddress][liquidityProviderAddress]) {
+        if (subscribers[liquidityProviderAddress][_uniswapPairAddress].state) {
             revert AlreadySubscribed();
         }
         _;
@@ -35,7 +35,10 @@ contract subscriptionManagementGuards is
         address _uniswapPairAddress,
         address liquidityProviderAddress
     ) {
-        if (!subscribers[_uniswapPairAddress][liquidityProviderAddress]) {
+        if (
+            !subscribers[liquidityProviderAddress][liquidityProviderAddress]
+                .state
+        ) {
             revert NotSubscribed();
         }
         _;

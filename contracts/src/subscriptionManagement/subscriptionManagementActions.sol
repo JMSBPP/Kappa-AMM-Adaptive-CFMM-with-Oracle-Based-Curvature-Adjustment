@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {subscriptionManagementPermissionedActions} from "./subscriptionManagementPermissionedActions.sol";
-import {subscriptionManagementAPI} from "./subscriptionManagementAPI.sol";
+import {subscriptionManagementOffchain} from "./subscriptionManagementOffchain.sol";
 contract subscriptionManagementActions is
     subscriptionManagementPermissionedActions
 {

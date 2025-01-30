@@ -14,12 +14,18 @@ contract subscriptionManagementState {
         NOT_INITIALIZING
     }
 
+    struct Markets {
+        address uniswapPairAddress;
+        address kappaAddress;
+        bool state;
+    }
+
     //security:
     // How an attacker can modify a private mapping?
     //  What incentives would he has to do so?
 
     mapping(address => SubscriptionState) internal subscriptionState;
-    mapping(address => mapping(address => bool)) internal subscribers;
+    mapping(address => mapping(address => Markets)) internal subscribers;
     // protocol:
     //  UP TO HOW MANY SUBSCRIBERS DETERMINES uint(?) ?
     //security:
